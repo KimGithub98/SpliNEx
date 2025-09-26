@@ -395,8 +395,6 @@ get_ucsc_url <- function(event, event_type, chrom){
   } else if (event_type == "MX"){
     region <- paste(unlist(str_split(event, ";|:|-"))[5], unlist(str_split(event, ";|:|-"))[10], sep = "%2D")
   }
-  
-  url <- paste("https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr",
-               chrom, "%3A", region,"&hgsid=3105379726_WztiYfH5MmB7opvD3IShAna1jQz.com", sep = "")
+  url <- paste("https://genome.ucsc.edu/cgi-bin/hgTracks?hgsid=3191311462&position=chr", chrom, ":", region, sep = "")
   return(url)
 }
