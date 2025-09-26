@@ -33,10 +33,10 @@ wtc_gene_expression_server <- function(id) {
         # Plot
         ggplot(gene_count_df, aes(x = DIV, y = gene_count)) +
           geom_boxplot(aes(fill = DIV), outlier.shape = NA) +
-          geom_point(aes(shape = Data_source, color = treatment),
+          geom_point(aes(shape = Data_source_pretty_name, color = treatment),
                      size = 3,
                      position = position_jitterdodge(dodge.width = 0.75, jitter.width = 0.3)) +
-          labs(x = "DIV", y = "Normalized gene counts") +
+          labs(x = "DIV", y = "Normalized gene counts", shape = "Data source", color = "Treatment") +
           scale_shape_manual(values = c(15, 16, 17, 18, 8)) +
           scale_fill_manual(values = div_colors) +
           scale_color_manual(values = c("red2", "khaki3", "gray18")) +
