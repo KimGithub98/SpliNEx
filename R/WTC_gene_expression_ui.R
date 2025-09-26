@@ -23,6 +23,7 @@ wtc_gene_expression_ui <- function(id) {
                                   choices = pretty_names, 
                                   selected = pretty_names),
                textInput(ns("wtc_gene"), "Gene:", "HGNC symbol"),
+               uiOutput(ns("message")),
                actionButton(ns("submit_wtc"), "Submit")
              ),
              

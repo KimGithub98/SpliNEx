@@ -1,21 +1,23 @@
 wtc_gene_expression_server <- function(id) {
   moduleServer(id, function(input, output, session) {
+    gene_msg <- reactiveVal(NULL)
     observeEvent(input$submit_wtc, {
       output$wtc_gene_plot <- renderPlot({
         gene <- input$wtc_gene
         selected_batches <- input$selected_batches
         selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
         
-        # Show message if gene not found
+        # reset message
+        gene_msg(NULL)
+        
         if (!(gene %in% rownames(normalized_counts_df))) {
-          output$message <- renderText({"Gene not found in dataset."})
-          return(NULL)
+          gene_msg(tags$span(style = "color:red;", "Gene not found in dataset."))
+          return()
         }
         
-        # Show message if no samples are selected
         if (is.null(selected_samples) || length(selected_samples) == 0) {
-          output$message <- renderText({"Please select at least one sample."})
-          return(NULL)
+          gene_msg(tags$span(style = "color:red;", "Please select at least one sample."))
+          return()
         }
         
         # Subset gene counts for selected samples
@@ -45,6 +47,9 @@ wtc_gene_expression_server <- function(id) {
                 plot.title = element_text(hjust = 0.5, size = 20)) +
           ggtitle(gene)
       })
+    })
+    output$message <- renderUI({
+      gene_msg()
     })
   })
 }
