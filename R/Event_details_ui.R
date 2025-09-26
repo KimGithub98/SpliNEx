@@ -27,9 +27,6 @@ event_details_ui <- function(id) {
              ),
              # Sashimi plot and UCSC button
              fluidRow(
-               column(width = 6,
-                      uiOutput(ns("checkbox_related_junctions"))
-               ),
                fluidRow(
                  column(width = 11, 
                         plotOutput(ns("Faux_sashimi_plot"), click = ns("faux_click"), height = "800px"),
@@ -41,6 +38,9 @@ event_details_ui <- function(id) {
                                  uiOutput(ns("goto_event_ui"))
                           )
                         )
+                 ),
+                 column(width = 6,
+                        uiOutput(ns("checkbox_related_junctions"))
                  ),
                  verbatimTextOutput(ns("nmd_gene_output"))
                )

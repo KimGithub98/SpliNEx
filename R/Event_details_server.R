@@ -1,6 +1,8 @@
 event_details_server <- function(id, selected_event) {
   moduleServer(id, function(input, output, session) {
     event_msg <- reactiveVal(NULL)
+    selected_event_id <- reactiveVal(NULL)
+    clicked_junction <- reactiveVal(NULL)
     fill_colors <- c(
       "iPSC.DMSO" = "ivory2",
       "iPSC.CHX" = colorspace::darken("ivory2", 0.3),
@@ -12,8 +14,6 @@ event_details_server <- function(id, selected_event) {
       "Micro.CHX" = colorspace::darken("burlywood4", 0.3)
     )
     
-    # --- single reactive value for the currently selected event ---
-    selected_event_id <- reactiveVal(NULL)
     
     # Update reactive when user clicks in NMD tab
     observeEvent(selected_event(), {
@@ -37,11 +37,18 @@ event_details_server <- function(id, selected_event) {
       }
     })
     
+    ## Update reactive when user clicks junction in related junction plot
+    observeEvent(input$goto_event, {
+      req(clicked_junction())
+      selected_event_id(clicked_junction())  # update reactive
+      updateTextInput(session, "event_input", value = clicked_junction())
+      updateTabsetPanel(session, "main_tabs", selected = "Event details")
+    })
+    
     # --- react to selected_event_id to generate plots/tables ---
     observeEvent(selected_event_id(), {
       event <- selected_event_id()
       row <- NMD_table_for_app[NMD_table_for_app$event_id == event, ]
-      # reset message
       
       event_type <- row$event_type
       chrom <- row$chrom
@@ -56,21 +63,24 @@ event_details_server <- function(id, selected_event) {
         DT::datatable(get_PSI_table_for_printing(PSI_df), escape = FALSE, options = list(scrollX = TRUE))
       })
       
-      # Junction plots
-      output$checkbox_related_junctions <- renderUI({
-        req(selected_event_id())  # show only after click
-        checkboxInput(session$ns("show_related_junctions"), "Show related junctions in region", FALSE)
-      })
       
-      junction_event_data <- get_junction_event_data(event, event_type, row, junction_summary_for_app, strand)
+      # Junction plots
+      junction_event_data <- get_junction_event_data(event, event_type, row, junction_summary_for_app, strand) ##gets junction data
+      ##gets sashimi plot
       output$Faux_sashimi_plot <- renderPlot({
         req(selected_event_id())
-        show_all_junctions_in_region <- input$show_related_junctions
+        show_all_junctions_in_region <- input$show_related_junctions ##checks if to show related junctions
         x_axis_label <- paste("Genomic Position (chr", chrom, ")", sep = "")
         get_faux_sashimi_plot(event_type, junction_event_data$junction_df, 
                               junction_event_data$region_junction_df, x_axis_label, 
                               junction_event_data$exon_df, fill_colors, show_all_junctions_in_region)
       })
+      ##gives checkbox to view related junctions
+      output$checkbox_related_junctions <- renderUI({
+        req(selected_event_id())  # show only after click
+        checkboxInput(session$ns("show_related_junctions"), "Show related junctions in region", FALSE)
+      })
+      
       
       # Related junctions table
       output$related_junction_DT <- DT::renderDT({
@@ -78,7 +88,8 @@ event_details_server <- function(id, selected_event) {
                       escape = FALSE, options = list(scrollX = TRUE))
       })
       
-      # Click info
+      # Clickable plot to select events and junctions
+      ##creates text with information on clicked junction
       output$faux_info <- renderText({
         req(input$faux_click)
         click_selected_row <- return_clicked_junction(input$faux_click$x, input$faux_click$y,
@@ -91,31 +102,29 @@ event_details_server <- function(id, selected_event) {
                "\nmean junction count = ", round(click_selected_row$mean_count,2),
                "\nstandard deviation = ", round(click_selected_row$sd_count,2))
       })
-      
-      # Go to selected event button
+      ## creates go-to-clicked event button
       output$goto_event_ui <- renderUI({
         req(input$faux_click)  # show only after click
         actionButton(session$ns("goto_event"), "Go to selected event")
       })
-      
+      ## Update reactive when user clicks junction in related junction plot
       observeEvent(input$goto_event, {
         req(input$faux_click)
         click_selected_row <- return_clicked_junction(input$faux_click$x, input$faux_click$y,
                                                       junction_event_data$junction_df,
                                                       junction_event_data$region_junction_df)
-        selected_event_id(click_selected_row$event_id)  # update reactive
-        updateTextInput(session, "event_input", value = click_selected_row$event_id)
-        updateTabsetPanel(session, "main_tabs", selected = "Event details")
+        clicked_junction(click_selected_row$event_id)
       })
       
     })
     
     #UCSC genome browser button 
+    ##create button
     output$ucsc_button_ui <- renderUI({
       req(selected_event_id())   # only show button if an event is selected
       actionButton(session$ns("go_button"), "View transcripts in event region (UCSC genome browser)", class = "btn btn-primary")
     })
-    
+    ##links click on button to UCSC genome browser
     observeEvent(input$go_button, {
       req(selected_event_id())
       event <- selected_event_id()
@@ -124,6 +133,7 @@ event_details_server <- function(id, selected_event) {
       browseURL(url)
       shinyjs::disable("go_button") 
     })
+    ##outputs message if event not found
     output$message <- renderUI({
       event_msg()
     })
