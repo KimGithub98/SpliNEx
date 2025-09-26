@@ -1,0 +1,51 @@
+wtc_gene_expression_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+    observeEvent(input$submit_wtc, {
+      output$wtc_gene_plot <- renderPlot({
+        gene <- input$wtc_gene
+        selected_batches <- input$selected_batches
+        selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
+        
+        # Show message if gene not found
+        if (!(gene %in% rownames(normalized_counts_df))) {
+          output$message <- renderText({"Gene not found in dataset."})
+          return(NULL)
+        }
+        
+        # Show message if no samples are selected
+        if (is.null(selected_samples) || length(selected_samples) == 0) {
+          output$message <- renderText({"Please select at least one sample."})
+          return(NULL)
+        }
+        
+        # Subset gene counts for selected samples
+        gene_counts <- t(normalized_counts_df[gene, selected_samples, drop = FALSE])
+        
+        # Subset metadata to selected samples
+        metadata <- colData_df[selected_samples, , drop = FALSE]
+        
+        # Combine into one dataframe
+        gene_count_df <- as.data.frame(gene_counts)
+        gene_count_df <- cbind(gene_count_df, metadata)
+        colnames(gene_count_df)[1] <- "gene_count"
+        gene_count_df$DIV <- factor(gene_count_df$DIV, levels = c("iPSC", "DIV21", "DIV28","DIV49", "Astrocytes", "Microglia"))
+        
+        # Plot
+        ggplot(gene_count_df, aes(x = DIV, y = gene_count)) +
+          geom_boxplot(aes(fill = DIV), outlier.shape = NA) +
+          geom_point(aes(shape = Data_source, color = treatment),
+                     size = 3,
+                     position = position_jitterdodge(dodge.width = 0.75, jitter.width = 0.3)) +
+          labs(x = "DIV", y = "Normalized gene counts") +
+          scale_shape_manual(values = c(15, 16, 17, 18, 8)) +
+          scale_fill_manual(values = div_colors) +
+          scale_color_manual(values = c("red2", "khaki3", "gray18")) +
+          theme_classic() +
+          theme(legend.position = "bottom",
+                plot.title = element_text(hjust = 0.5, size = 20)) +
+          ggtitle(gene)
+      })
+    })
+  })
+}
+
