@@ -24,7 +24,7 @@ nmd_event_per_gene_server <- function(id) {
       gene <- input$nmd_gene
       selected_batches <- batch_ids[grepl("DMSO|CHX", batch_ids)]
       selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
-      NMD_table_for_app_gene <- NMD_table_for_app[grepl(gene, NMD_table_for_app$hgnc_name),]
+      NMD_table_for_app_gene <- NMD_table_for_app[NMD_table_for_app$hgnc_name == gene,]
       
       # Show message if gene not found
       if (!(gene %in% NMD_table_for_app$hgnc_name)) {
@@ -45,7 +45,9 @@ nmd_event_per_gene_server <- function(id) {
                  sample_pretty = pretty_LR_coverage_labels[sample]) 
         
         long_df <- long_df[!grepl("Ensembl|RefSeq", long_df$sample),]
-        print(head(long_df))
+        long_df$sample_pretty <- factor(long_df$sample_pretty, c("iPSC (DMSO)", "iPSC (CHX)","iNeurons (DMSO)","iNeurons (CHX)",
+                                                                 "Astrocytes (DMSO)","Astrocytes (CHX)","Microglia (DMSO)","Microglia (CHX)"))
+        
         ggplot(long_df, aes(x = sample_pretty, y = log10(gene_count+1))) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "red", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(50), fill = "orange", alpha = 0.2) +
@@ -58,6 +60,27 @@ nmd_event_per_gene_server <- function(id) {
                 plot.title = element_text(hjust = 0.5, size = 20),
                 axis.text.x = element_text(angle = 45, hjust = 1)) +
           ggtitle("Long-read (LR) gene coverage")
+      })
+      ##explanation coverage color zones
+      output$coverage_legend <- renderUI({
+        req(input$nmd_gene)  # ensures plot is rendered first
+        fluidRow(
+          column(
+            width = 12,
+            wellPanel(
+              style = "background-color: #f9f9f9; border: 1px solid #ccc;",
+              tags$strong("Explanation of color zones for short-read (SR) / long-read (LR) coverage: "), 
+              tags$br(),
+              tags$span(style = "color:green;", "Green: High SR/LR coverage — robust detection of isoforms and more reliable PSI estimates."),
+              tags$br(),
+              tags$span(style = "color:goldenrod;", "Yellow: Medium SR/LR coverage — moderate detection of isoforms and moderately reliable PSI values."),
+              tags$br(),
+              tags$span(style = "color:orange;", "Orange: Low SR/LR coverage — reduced detection of isoforms and potentially less reliable or missing PSI values."),
+              tags$br(),
+              tags$span(style = "color:red;", "Red: Very low SR/LR coverage — poor detection of isoforms and potentially less reliable or missing PSI values.")
+            )
+          )
+        )
       })
       
       #create NMD table to show

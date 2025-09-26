@@ -21,6 +21,7 @@ nmd_event_per_gene_ui <- function(id) {
                  column(width = 6, plotOutput(ns("nmd_LR_gene_plot"), height = "400px")),
                  column(width = 6, plotOutput(ns("nmd_SR_gene_plot"), height = "400px"))
                ),
+               uiOutput(ns("coverage_legend")),
                fluidRow(
                  column(12,  # full width
                         DT::dataTableOutput(ns("NMD_table"))
