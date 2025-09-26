@@ -79,15 +79,15 @@ nmd_event_per_gene_server <- function(id) {
         )
         
         dt$perc_region_avg <- ifelse(
-          dt$perc_region_avg < 10,
-          paste0('<span class="glyphicon glyphicon-exclamation-sign" style="color:red;" title="Very low contribution to total gene coverage ( <10% ) — likely biologically irrelevant"></span> (', dt$perc_region_avg, "%)"),
+          dt$perc_region_avg < 20,
+          paste0('<span class="glyphicon glyphicon-exclamation-sign" style="color:red;" title="Low contribution of LR event coverage to LR region coverage (<20%): Indicative for an irrelavent AS-event annotation and inacurate PSI estimation"></span> (', dt$perc_region_avg, "%)"),
           ifelse(
             dt$perc_region_avg < 60,
-            paste0('<span class="glyphicon glyphicon-exclamation-sign" style="color:orange;" title="Low contribution total gene coverage (10–49%) — potentially minor biological relevance"></span> (', dt$perc_region_avg, "%)"),
+            paste0('<span class="glyphicon glyphicon-exclamation-sign" style="color:orange;" title="Low contribution of LR event coverage to LR region coverage (20–49%): Indicative for complex splicing or a less relavent AS-event annotation and less acurate PSI estimation"></span> (', dt$perc_region_avg, "%)"),
             ifelse(
               dt$perc_region_avg < 80,
-              paste0('<span class="glyphicon glyphicon-exclamation-sign" style="color:gold;" title="Moderate (50–89%)"></span> (', dt$perc_region_avg, "%)"),
-              paste0('<span class="glyphicon glyphicon-ok" style="color:green;" title="High (≥90%)"></span> (', dt$perc_region_avg, "%)")
+              paste0('<span class="glyphicon glyphicon-exclamation-sign" style="color:gold;" title="Moderate contribution of LR event coverage to LR region coverage (50–89%): Indicative for complex splicing or a less relavent AS-event annotation and less acurate PSI estimation"></span> (', dt$perc_region_avg, "%)"),
+              paste0('<span class="glyphicon glyphicon-ok" style="color:green;" title="High contribution of LR event coverage to LR region coverage (≥90%): Indicative for a relavent AS-event annotation and acurate PSI estimation"></span> (', dt$perc_region_avg, "%)")
             )
           )
         )
@@ -103,7 +103,7 @@ nmd_event_per_gene_server <- function(id) {
                                        "  $(thead).find('th').eq(4).attr('title','Indicates if event causes NMD predicted by the NMD-exclusive method');",
                                        "  $(thead).find('th').eq(5).attr('title','HGNC gene symbol');",
                                        "  $(thead).find('th').eq(6).attr('title','HGNC gene ID');",
-                                       "  $(thead).find('th').eq(7).attr('title','Relative event coverage: (LR reads supporting the inclusion or exclusion of the event)/(LR reads spanning the event region). A high score is indicative of an accurate PSI estimation, a medium to low score is indicative of complex splicing in the region leading which may lead to less-acurate PSI estimations');",
+                                       "  $(thead).find('th').eq(7).attr('title','Relative event coverage: (LR reads supporting the inclusion or exclusion of the event)/(LR reads spanning the event region). A high score is indicative for a relavant AS-event annotation and accurate PSI estimation, a medium to low score is indicative for a irrelavent AS-event annotation and/or complex splicing in the region leading which may lead to less-acurate PSI estimations');",
                                        "  $(thead).find('th').eq(8).attr('title','Mean PSI (%) of all samples (iPSCs, iNeurons, Astrocytes and Microglia treated with CHX or DMSO)');",
                                        "  $(thead).find('th').eq(9).attr('title','Standard deviation of the PSI values(%) of all samples (iPSCs, iNeurons, Astrocytes and Microglia treated with CHX or DMSO');",
                                        "}"
