@@ -48,8 +48,14 @@ event_details_server <- function(id, selected_event) {
       })
       
       # Junction plots
+      output$checkbox_related_junctions <- renderUI({
+        req(selected_event_id())  # show only after click
+        checkboxInput(session$ns("show_related_junctions"), "Show related junctions in region", FALSE)
+      })
+      
       junction_event_data <- get_junction_event_data(event, event_type, row, junction_summary_for_app, strand)
       output$Faux_sashimi_plot <- renderPlot({
+        req(selected_event_id())
         show_all_junctions_in_region <- input$show_related_junctions
         x_axis_label <- paste("Genomic Position (chr", chrom, ")", sep = "")
         get_faux_sashimi_plot(event_type, junction_event_data$junction_df, 
@@ -95,10 +101,15 @@ event_details_server <- function(id, selected_event) {
       
     })
     
-    # UCSC button
+    #UCSC genome browser button 
+    output$ucsc_button_ui <- renderUI({
+      req(selected_event_id())   # only show button if an event is selected
+      actionButton(session$ns("go_button"), "View transcripts in event region (UCSC genome browser)", class = "btn btn-primary")
+    })
+    
     observeEvent(input$go_button, {
+      req(selected_event_id())
       event <- selected_event_id()
-      req(event)
       row <- NMD_table_for_app[NMD_table_for_app$event_id == event, ]
       url <- get_ucsc_url(event, row$event_type, row$chrom)
       browseURL(url)
