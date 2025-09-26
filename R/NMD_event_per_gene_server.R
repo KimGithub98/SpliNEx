@@ -20,16 +20,19 @@ pretty_SR_coverage_labels <- c(
 
 nmd_event_per_gene_server <- function(id) {
   moduleServer(id, function(input, output, session) {
+    gene_msg <- reactiveVal(NULL)
     observeEvent(input$submit_nmd, {
       gene <- input$nmd_gene
       selected_batches <- batch_ids[grepl("DMSO|CHX", batch_ids)]
       selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
       NMD_table_for_app_gene <- NMD_table_for_app[NMD_table_for_app$hgnc_name == gene,]
       
-      # Show message if gene not found
+      # reset message
+      gene_msg(NULL)
+      
       if (!(gene %in% NMD_table_for_app$hgnc_name)) {
-        output$message <- renderText({"Gene not found in dataset."})
-        return(NULL)
+        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset."))
+        return()
       }
       
       #plot LR coverage
@@ -71,13 +74,13 @@ nmd_event_per_gene_server <- function(id) {
               style = "background-color: #f9f9f9; border: 1px solid #ccc;",
               tags$strong("Explanation of color zones for short-read (SR) / long-read (LR) coverage: "), 
               tags$br(),
-              tags$span(style = "color:green;", "Green: High SR/LR coverage — robust detection of isoforms and more reliable PSI estimates."),
+              tags$span(style = "color:green;", "Green: High SR/LR coverage — Likely robust detection of isoforms and more reliable PSI estimates."),
               tags$br(),
-              tags$span(style = "color:goldenrod;", "Yellow: Medium SR/LR coverage — moderate detection of isoforms and moderately reliable PSI values."),
+              tags$span(style = "color:goldenrod;", "Yellow: Medium SR/LR coverage — Likely moderate detection of isoforms and moderately reliable PSI values."),
               tags$br(),
-              tags$span(style = "color:orange;", "Orange: Low SR/LR coverage — reduced detection of isoforms and potentially less reliable or missing PSI values."),
+              tags$span(style = "color:orange;", "Orange: Low SR/LR coverage — Likely reduced detection of isoforms and potentially less reliable or missing PSI values."),
               tags$br(),
-              tags$span(style = "color:red;", "Red: Very low SR/LR coverage — poor detection of isoforms and potentially less reliable or missing PSI values.")
+              tags$span(style = "color:red;", "Red: Very low SR/LR coverage — Likely poor detection of isoforms and potentially less reliable or missing PSI values.")
             )
           )
         )
@@ -92,6 +95,10 @@ nmd_event_per_gene_server <- function(id) {
                                        NMD_table_for_app_gene$NMD_exclusive %in% selected_NMD_only &
                                        NMD_table_for_app_gene$event_type %in% selected_event_types,
                                      c("event_type", "event_id", "NMD_sister_transcript", "NMD_exclusive", "hgnc_name", "hgnc_id", "perc_region_avg", "avg_PSI", "sd_PSI")]
+        if (nrow(dt) == 0) {
+          gene_msg(tags$span(style = "color:red;", "No events found in dataset for your selected options."))
+          return()
+        }
         dt$perc_region_avg <- round(dt$perc_region_avg*100)
         dt$avg_PSI <- round(dt$avg_PSI*100, digits = 1)
         dt$sd_PSI <- round(dt$sd_PSI*100, digits = 1)
@@ -180,7 +187,9 @@ nmd_event_per_gene_server <- function(id) {
                 axis.text.x = element_text(angle = 45, hjust = 1)) +
           ggtitle("Short-read (SR) gene coverage")
       })
-    }
-    )
+    })
+    output$message_NMD_event_per_gene <- renderUI({
+      gene_msg()
+    })
   })
 }

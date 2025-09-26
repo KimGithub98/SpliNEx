@@ -4,6 +4,7 @@ nmd_event_per_gene_ui <- function(id) {
            sidebarLayout(
              sidebarPanel(
                textInput(ns("nmd_gene"), "Gene:", "HGNC symbol"),
+               uiOutput(ns("message_NMD_event_per_gene")),
                checkboxGroupInput(ns("selected_NMD_event_types"), "NMD types to show (Splice-context aware method):",
                                   choices = NMD_event_types, 
                                   selected = NMD_event_types),
