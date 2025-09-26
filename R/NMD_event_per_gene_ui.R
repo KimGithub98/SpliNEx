@@ -4,10 +4,10 @@ nmd_event_per_gene_ui <- function(id) {
            sidebarLayout(
              sidebarPanel(
                textInput(ns("nmd_gene"), "Gene:", "HGNC symbol"),
-               checkboxGroupInput(ns("selected_NMD_event_types"), "NMD types to show (sister transcript):",
+               checkboxGroupInput(ns("selected_NMD_event_types"), "NMD types to show (Splice-context aware method):",
                                   choices = NMD_event_types, 
                                   selected = NMD_event_types),
-               checkboxGroupInput(ns("selected_NMD_only_types"), "NMD types to show (NMD exclusive method):",
+               checkboxGroupInput(ns("selected_NMD_only_types"), "NMD types to show (NMD-exclusive method):",
                                   choices = NMD_only_types, 
                                   selected = NMD_only_types),
                checkboxGroupInput(ns("selected_event_types"), "Event types to show:",

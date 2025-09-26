@@ -1,3 +1,23 @@
+pretty_LR_coverage_labels <- c(
+  "1_D_C" = "iNeurons (CHX)",
+  "2_D_D" = "iNeurons (DMSO)",
+  "3_i_C" = "iPSC (CHX)",
+  "4_i_D" = "iPSC (DMSO)",
+  "5_A_C" = "Astrocytes (CHX)",
+  "6_A_D" = "Astrocytes (DMSO)",
+  "7_M_C" = "Microglia (CHX)",
+  "8_M_D" = "Microglia (DMSO)"
+)
+
+pretty_SR_coverage_labels <- c(
+  "iPSC" = "iPSC", 
+  "DIV21" = "iNeurons (DIV21)", 
+  "DIV28" = "iNeurons (DIV28)",
+  "DIV49" = "iNeurons", 
+  "Astrocytes" = "Astrocytes", 
+  "Microglia" = "Microglia"
+)
+
 nmd_event_per_gene_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     observeEvent(input$submit_nmd, {
@@ -21,21 +41,23 @@ nmd_event_per_gene_server <- function(id) {
             names_to = "sample",
             values_to = "gene_count"
           ) %>%
-          mutate(sample = str_remove(sample, "gene_coverage_")) 
+          mutate(sample = str_remove(sample, "gene_coverage_"),
+                 sample_pretty = pretty_LR_coverage_labels[sample]) 
         
         long_df <- long_df[!grepl("Ensembl|RefSeq", long_df$sample),]
-        
-        ggplot(long_df, aes(x = sample, y = log(gene_count+1))) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log(10), fill = "red", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log(10), ymax = log(50), fill = "orange", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log(50), ymax = log(200), fill = "yellow", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log(200), ymax = Inf, fill = "green", alpha = 0.2) +
+        print(head(long_df))
+        ggplot(long_df, aes(x = sample_pretty, y = log10(gene_count+1))) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "red", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(50), fill = "orange", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(50), ymax = log10(200), fill = "yellow", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(200), ymax = Inf, fill = "green", alpha = 0.2) +
           geom_point(size = 3) +
-          labs(x = "", y = "LR coverage") +
+          labs(x = "", y = "log10(LR gene coverage)") +
           theme_classic() +
           theme(legend.position = "bottom",
-                plot.title = element_text(hjust = 0.5, size = 20)) +
-          ggtitle("LR gene coverage")
+                plot.title = element_text(hjust = 0.5, size = 20),
+                axis.text.x = element_text(angle = 45, hjust = 1)) +
+          ggtitle("Long-read (LR) gene coverage")
       })
       
       #create NMD table to show
@@ -88,24 +110,27 @@ nmd_event_per_gene_server <- function(id) {
         gene_count_df <- as.data.frame(gene_counts)
         gene_count_df <- cbind(gene_count_df, metadata)
         colnames(gene_count_df)[1] <- "gene_count"
+        gene_count_df$pretty_sample_name <- pretty_SR_coverage_labels[gene_count_df$DIV]
+        gene_count_df$pretty_sample_name <- factor(gene_count_df$pretty_sample_name, levels = c("iPSC", "iNeurons (DIV21)", "iNeurons (DIV28)","iNeurons", "Astrocytes", "Microglia"))
         gene_count_df$DIV <- factor(gene_count_df$DIV, levels = c("iPSC", "DIV21", "DIV28","DIV49", "Astrocytes", "Microglia"))
         
         # Plot
-        ggplot(gene_count_df, aes(x = DIV, y = log(gene_count)), fill = "ivory2") +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log(10), fill = "red", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log(10), ymax = log(100), fill = "orange", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log(100), ymax = log(1000), fill = "yellow", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log(1000), ymax = Inf, fill = "green", alpha = 0.2) +
+        ggplot(gene_count_df, aes(x = pretty_sample_name, y = log10(gene_count)), fill = "ivory2") +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "red", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(100), fill = "orange", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(100), ymax = log10(1000), fill = "yellow", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(1000), ymax = Inf, fill = "green", alpha = 0.2) +
           geom_boxplot(fill = "ivory2", outlier.shape = NA) +
           geom_jitter(aes(shape = treatment),
                       width = 0.2,   
                       height = 0, 
                       size = 3) + # slight transparency so overlaps are visible
-          labs(x = "DIV", y = "Log(Normalized gene counts)") +
+          labs(x = "", y = "log10(Normalized gene counts)", shape = "Treatment") +
           theme_classic() +
           theme(legend.position = "bottom",
-                plot.title = element_text(hjust = 0.5, size = 20)) +
-          ggtitle("SR gene expression/coverage")
+                plot.title = element_text(hjust = 0.5, size = 20),
+                axis.text.x = element_text(angle = 45, hjust = 1)) +
+          ggtitle("Short-read (SR) gene coverage")
       })
     }
     )
