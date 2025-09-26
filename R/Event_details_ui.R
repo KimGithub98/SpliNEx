@@ -10,7 +10,9 @@ event_details_ui <- function(id) {
                           actionButton(ns("submit_event"), "Submit", style = "margin-left: 10px; height: 50px;")
                       )
                ),
-               column(width = 6, 
+               column(width = 4,
+                      uiOutput(ns("message"))),
+               column(width = 4, 
                       uiOutput(ns("ucsc_button_ui"))
                )
              ),

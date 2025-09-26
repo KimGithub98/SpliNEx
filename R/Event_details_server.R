@@ -1,6 +1,6 @@
 event_details_server <- function(id, selected_event) {
   moduleServer(id, function(input, output, session) {
-    
+    event_msg <- reactiveVal(NULL)
     fill_colors <- c(
       "iPSC.DMSO" = "ivory2",
       "iPSC.CHX" = colorspace::darken("ivory2", 0.3),
@@ -17,6 +17,7 @@ event_details_server <- function(id, selected_event) {
     
     # Update reactive when user clicks in NMD tab
     observeEvent(selected_event(), {
+      event_msg(NULL)
       selected_event_id(selected_event())
       updateTextInput(session, "event_input", value = selected_event())
       updateTabsetPanel(session, "main_tabs", selected = "Event details")
@@ -25,8 +26,14 @@ event_details_server <- function(id, selected_event) {
     # Update reactive when user submits an event manually
     observeEvent(input$submit_event, {
       event <- as.character(input$event_input)
+      event_msg(NULL)
       if (event %in% NMD_table_for_app$event_id) {
         selected_event_id(event)
+      }
+      
+      if (!(event %in% NMD_table_for_app$event_id)) {
+        event_msg(tags$span(style = "color:red;", "Event not found in dataset."))
+        return()
       }
     })
     
@@ -34,6 +41,8 @@ event_details_server <- function(id, selected_event) {
     observeEvent(selected_event_id(), {
       event <- selected_event_id()
       row <- NMD_table_for_app[NMD_table_for_app$event_id == event, ]
+      # reset message
+      
       event_type <- row$event_type
       chrom <- row$chrom
       strand <- row$strand
@@ -114,6 +123,9 @@ event_details_server <- function(id, selected_event) {
       url <- get_ucsc_url(event, row$event_type, row$chrom)
       browseURL(url)
       shinyjs::disable("go_button") 
+    })
+    output$message <- renderUI({
+      event_msg()
     })
   })
 }
