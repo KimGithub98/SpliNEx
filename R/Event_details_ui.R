@@ -43,6 +43,13 @@ event_details_ui <- function(id) {
                  verbatimTextOutput(ns("nmd_gene_output"))
                )
              )
-           )
+           ),
+           hr(),
+           HTML("
+           <b>References & data sources:</b><br>
+           1. Wijnant et al. 2025<br><br>
+           <b>Please city: Wijnant et al. 2025</b><br>
+           Build with Shiny & Shinythemes in R version 4.4.1")
   )
+  
 }

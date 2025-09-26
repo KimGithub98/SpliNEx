@@ -30,6 +30,16 @@ wtc_gene_expression_ui <- function(id) {
                plotOutput(ns("wtc_gene_plot")),
                verbatimTextOutput(ns("wtc_gene_output"))
              )
-           )
+           ),
+           hr(),
+           HTML("
+           <b>References & data sources:</b><br>
+           1. Wijnant et al. 2025<br>
+           2. Elly et al. 2025<br>
+           3. Emma et al. 2025<br>
+           4. Marina et al. 2025<br>
+           5. Xiuming et al. 2025<br><br>
+           <b>Please city: Wijnant et al. 2025</b><br>
+           Build with Shiny & Shinythemes in R version 4.4.1")
   )
 }
