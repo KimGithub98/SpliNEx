@@ -93,12 +93,16 @@ event_details_server <- function(id, selected_event) {
         updateTabsetPanel(session, "main_tabs", selected = "Event details")
       })
       
-      # UCSC button
-      observeEvent(input$go_button, {
-        url <- get_ucsc_url(event, event_type, chrom)
-        browseURL(url)
-        shinyjs::disable("go_button") 
-      })
+    })
+    
+    # UCSC button
+    observeEvent(input$go_button, {
+      event <- selected_event_id()
+      req(event)
+      row <- NMD_table_for_app[NMD_table_for_app$event_id == event, ]
+      url <- get_ucsc_url(event, row$event_type, row$chrom)
+      browseURL(url)
+      shinyjs::disable("go_button") 
     })
   })
 }
