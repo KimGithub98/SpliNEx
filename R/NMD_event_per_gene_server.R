@@ -94,7 +94,32 @@ nmd_event_per_gene_server <- function(id) {
         
         DT::datatable(dt, 
                       escape = FALSE,  # needed to render HTML
-                      options = list(scrollX = TRUE))
+                      options = list(scrollX = TRUE,
+                                     headerCallback = DT::JS(
+                                       "function(thead, data, start, end, display){",
+                                       "  $(thead).find('th').eq(1).attr('title','Type of alternative splicing event (Annotated by SUPPA)');",
+                                       "  $(thead).find('th').eq(2).attr('title','Unique SUPPA event ID (Annotated by SUPPA)');",
+                                       "  $(thead).find('th').eq(3).attr('title','Indicates if event causes NMD predicted by the splice-context aware method');",
+                                       "  $(thead).find('th').eq(4).attr('title','Indicates if event causes NMD predicted by the NMD-exclusive method');",
+                                       "  $(thead).find('th').eq(5).attr('title','HGNC gene symbol');",
+                                       "  $(thead).find('th').eq(6).attr('title','HGNC gene ID');",
+                                       "  $(thead).find('th').eq(7).attr('title','Relative event coverage: (LR reads supporting the inclusion or exclusion of the event)/(LR reads spanning the event region). A high score is indicative of an accurate PSI estimation, a medium to low score is indicative of complex splicing in the region leading which may lead to less-acurate PSI estimations');",
+                                       "  $(thead).find('th').eq(8).attr('title','Mean PSI (%) of all samples (iPSCs, iNeurons, Astrocytes and Microglia treated with CHX or DMSO)');",
+                                       "  $(thead).find('th').eq(9).attr('title','Standard deviation of the PSI values(%) of all samples (iPSCs, iNeurons, Astrocytes and Microglia treated with CHX or DMSO');",
+                                       "}"
+                                     )
+                                     ),
+                      colnames = c(
+                        "Event type",
+                        "Event ID",
+                        "NMD prediction (splice-context aware)",
+                        "NMD prediction (NMD-exclusive)",
+                        "Gene symbol (HGNC)",
+                        "HGNC ID",
+                        "Relative event coverage (%)",
+                        "Average PSI (%)",
+                        "Standard deviation PSI (%)"
+                      ))
         #DT::datatable(dt, options = list(scrollX = TRUE))
       })
       
