@@ -28,8 +28,18 @@ wtc_gene_expression_ui <- function(id) {
              ),
              
              mainPanel(
-               plotOutput(ns("wtc_gene_plot")),
-               verbatimTextOutput(ns("wtc_gene_output"))
+               conditionalPanel(condition = sprintf("output['%s'] == 'true'", ns("plot_ready")),
+                                fluidRow(downloadButton(ns("download_gene_exp_plot_png"), "Download Plot as PNG"),
+                                         downloadButton(ns("download_gene_exp_plot_svg"), "Download Plot as SVG"))
+                                ),
+               fluidRow(
+                 column(8,
+                        plotOutput(ns("wtc_gene_plot")),
+                        verbatimTextOutput(ns("wtc_gene_output"))
+                        )
+                 
+               )
+               
              )
            ),
            hr(),

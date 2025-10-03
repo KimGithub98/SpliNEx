@@ -8,6 +8,7 @@ library(tidyr)
 library(stringr)
 library(shinyjs)
 library(RColorBrewer)
+library(bslib)
 source(paste(script_dir,"/R/Event_details_functions.R", sep = ""))
 
 #-------------Load data ------------------------------

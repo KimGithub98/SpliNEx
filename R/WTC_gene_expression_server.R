@@ -1,53 +1,89 @@
 wtc_gene_expression_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     gene_msg <- reactiveVal(NULL)
+    
+    #reactive plot function
+    wtc_gene_plot <- reactive({
+      gene <- input$wtc_gene
+      selected_batches <- input$selected_batches
+      selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
+      
+      # reset message
+      gene_msg(NULL)
+      
+      if (!(gene %in% rownames(normalized_counts_df))) {
+        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset."))
+        return()
+      }
+      
+      if (is.null(selected_samples) || length(selected_samples) == 0) {
+        gene_msg(tags$span(style = "color:red;", "Please select at least one sample."))
+        return()
+      }
+      
+      # Subset gene counts for selected samples
+      gene_counts <- t(normalized_counts_df[gene, selected_samples, drop = FALSE])
+      
+      # Subset metadata to selected samples
+      metadata <- colData_df[selected_samples, , drop = FALSE]
+      
+      # Combine into one dataframe
+      gene_count_df <- as.data.frame(gene_counts)
+      gene_count_df <- cbind(gene_count_df, metadata)
+      colnames(gene_count_df)[1] <- "gene_count"
+      gene_count_df$DIV <- factor(gene_count_df$DIV, levels = c("iPSC", "DIV21", "DIV28","DIV49", "Astrocytes", "Microglia"))
+      
+      # Plot
+      ggplot(gene_count_df, aes(x = DIV, y = gene_count)) +
+        geom_boxplot(aes(fill = DIV), outlier.shape = NA) +
+        geom_point(aes(shape = Data_source_pretty_name, color = treatment),
+                   size = 3,
+                   position = position_jitterdodge(dodge.width = 0.75, jitter.width = 0.3)) +
+        labs(x = "Cell-type", y = "Normalized gene counts", shape = "Data source", color = "Treatment") +
+        scale_shape_manual(values = c(15, 16, 17, 18, 8)) +
+        scale_fill_manual(values = div_colors) +
+        scale_color_manual(values = c("red2", "khaki3", "gray18")) +
+        theme_classic() +
+        theme(plot.title = element_text(hjust = 0.5, size = 20)) +
+        ggtitle(gene)
+    })
+    
     observeEvent(input$submit_wtc, {
       output$wtc_gene_plot <- renderPlot({
-        gene <- input$wtc_gene
-        selected_batches <- input$selected_batches
-        selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
-        
-        # reset message
-        gene_msg(NULL)
-        
-        if (!(gene %in% rownames(normalized_counts_df))) {
-          gene_msg(tags$span(style = "color:red;", "Gene not found in dataset."))
-          return()
-        }
-        
-        if (is.null(selected_samples) || length(selected_samples) == 0) {
-          gene_msg(tags$span(style = "color:red;", "Please select at least one sample."))
-          return()
-        }
-        
-        # Subset gene counts for selected samples
-        gene_counts <- t(normalized_counts_df[gene, selected_samples, drop = FALSE])
-        
-        # Subset metadata to selected samples
-        metadata <- colData_df[selected_samples, , drop = FALSE]
-        
-        # Combine into one dataframe
-        gene_count_df <- as.data.frame(gene_counts)
-        gene_count_df <- cbind(gene_count_df, metadata)
-        colnames(gene_count_df)[1] <- "gene_count"
-        gene_count_df$DIV <- factor(gene_count_df$DIV, levels = c("iPSC", "DIV21", "DIV28","DIV49", "Astrocytes", "Microglia"))
-        
-        # Plot
-        ggplot(gene_count_df, aes(x = DIV, y = gene_count)) +
-          geom_boxplot(aes(fill = DIV), outlier.shape = NA) +
-          geom_point(aes(shape = Data_source_pretty_name, color = treatment),
-                     size = 3,
-                     position = position_jitterdodge(dodge.width = 0.75, jitter.width = 0.3)) +
-          labs(x = "DIV", y = "Normalized gene counts", shape = "Data source", color = "Treatment") +
-          scale_shape_manual(values = c(15, 16, 17, 18, 8)) +
-          scale_fill_manual(values = div_colors) +
-          scale_color_manual(values = c("red2", "khaki3", "gray18")) +
-          theme_classic() +
-          theme(legend.position = "bottom",
-                plot.title = element_text(hjust = 0.5, size = 20)) +
-          ggtitle(gene)
+        req(wtc_gene_plot())
+        wtc_gene_plot()
       })
     })
+    
+    output$download_gene_exp_plot_png <- downloadHandler(
+      filename = function(){
+        paste0(input$submit_wtc, ".png")
+      },
+      content = function(file){
+        ggsave(file, plot = wtc_gene_plot(), device = "png")
+      }
+    )
+    
+    output$download_gene_exp_plot_svg <- downloadHandler(
+      filename = function(){
+        paste0(input$submit_wtc, ".svg")
+      },
+      content = function(file){
+        ggsave(file, plot = wtc_gene_plot(), device = "svg")
+      }
+    )
+    
+    output$plot_ready <- renderText({
+      if (!is.null(wtc_gene_plot())) {
+        "true"
+      } else {
+        "false"
+      }
+    })
+    
+    outputOptions(output, "plot_ready", suspendWhenHidden = FALSE)
+    
+    
     output$message <- renderUI({
       gene_msg()
     })
