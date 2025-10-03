@@ -4,15 +4,15 @@ wtc_gene_expression_server <- function(id) {
     
     #reactive plot function
     wtc_gene_plot <- reactive({
+      req(input$submit_wtc)
       gene <- input$wtc_gene
       selected_batches <- input$selected_batches
       selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
       
-      # reset message
       gene_msg(NULL)
       
       if (!(gene %in% rownames(normalized_counts_df))) {
-        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset."))
+        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset. Did you use the HGNC symbol?"))
         return()
       }
       
@@ -49,6 +49,7 @@ wtc_gene_expression_server <- function(id) {
     })
     
     observeEvent(input$submit_wtc, {
+      # reset message
       output$wtc_gene_plot <- renderPlot({
         req(wtc_gene_plot())
         wtc_gene_plot()
