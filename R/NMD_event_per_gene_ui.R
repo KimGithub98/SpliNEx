@@ -23,6 +23,13 @@ nmd_event_per_gene_ui <- function(id) {
                  column(width = 6, plotOutput(ns("nmd_SR_gene_plot"), height = "400px"))
                ),
                uiOutput(ns("coverage_legend")),
+               conditionalPanel(condition = sprintf("output['%s'] == 'true'", ns("data_ready")),
+                                fluidRow(div(
+                                  style = "text-align: right; margin-bottom: 10px;",
+                                  downloadButton(ns("download_nmd_event_per_gene_table"), "Download table as CSV"),
+                                  downloadButton(ns("download_nmd_event_per_gene_full_table"), "Download extended table as CSV"),
+                                ))
+               ),
                fluidRow(
                  column(12,  # full width
                         DT::dataTableOutput(ns("NMD_table"))

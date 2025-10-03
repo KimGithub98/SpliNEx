@@ -86,8 +86,10 @@ nmd_event_per_gene_server <- function(id) {
         )
       })
       
-      #create NMD table to show
-      output$NMD_table <- DT::renderDT({
+      #function to create table
+      nmd_table_filtered <- reactive({
+        req(input$nmd_gene)
+        
         selected_NMD_event <- input$selected_NMD_event_types
         selected_NMD_only <- input$selected_NMD_only_types
         selected_event_types <- input$selected_event_types
@@ -102,6 +104,50 @@ nmd_event_per_gene_server <- function(id) {
         dt$perc_region_avg <- round(dt$perc_region_avg*100)
         dt$avg_PSI <- round(dt$avg_PSI*100, digits = 1)
         dt$sd_PSI <- round(dt$sd_PSI*100, digits = 1)
+        dt
+        #DT::datatable(dt, options = list(scrollX = TRUE))
+      })
+      
+      #function_to_create_extended table
+      nmd_table_filtered_extended <- reactive({
+        req(input$nmd_gene)
+        
+        selected_NMD_event <- input$selected_NMD_event_types
+        selected_NMD_only <- input$selected_NMD_only_types
+        selected_event_types <- input$selected_event_types
+        dt <- NMD_table_for_app_gene[NMD_table_for_app_gene$NMD_sister_transcript %in% selected_NMD_event &
+                                       NMD_table_for_app_gene$NMD_exclusive %in% selected_NMD_only &
+                                       NMD_table_for_app_gene$event_type %in% selected_event_types,]
+        cols_to_remove <- paste0("pos", 1:8)
+        dt <- dt %>% dplyr::select(-all_of(cols_to_remove), -avg_PSI.1, -sd_PSI.1)
+        
+        dt$perc_region_avg <- round(dt$perc_region_avg*100)
+        dt$avg_PSI <- round(dt$avg_PSI*100, digits = 1)
+        dt$sd_PSI <- round(dt$sd_PSI*100, digits = 1)
+        
+        colnames(dt) <- c("event_type","chrom","strand","event_id","NMD_sister_transcript","NMD_exclusive",
+                          "hgnc_name","hgnc_id","relative_event_coverage_iNeuron_CHX","relative_event_coverage_iNeuron_DMSO","relative_event_coverage_iPSC_CHX",
+                          "relative_event_coverage_4_iPSC_DMSO","relative_event_coverage_Astrocyte_CHX","relative_event_coverage_Astrocyte_DMSO","relative_event_coverage_Microglia_CHX",
+                          "relative_event_coverage_Microglia_DMSO","mean_relative_event_coverage","iPSC_CHX_1_PSI","iPSC_CHX_2_PSI","iPSC_CHX_3_PSI",
+                          "iPSC_DMSO_1_PSI","iPSC_DMSO_2_PSI","iPSC_DMSO_3_PSI","iNeuron_CHX_1_PSI","iNeuron_CHX_2_PSI",
+                          "iNeuron_CHX_3_PSI","iNeuron_DMSO_1_PSI","iNeuron_DMSO_2_PSI","iNeuron_DMSO_3_PSI","Astro_CHX_1_PSI",
+                          "Astro_CHX_2_PSI","Astro_CHX_3_PSI","Astro_DMSO_1_PSI","Astro_DMSO_2_PSI","Astro_DMSO_3_PSI",
+                          "Micro_CHX_1_PSI","Micro_CHX_2_PSI","Micro_CHX_3_PSI","Micro_DMSO_1_PSI","Micro_DMSO_2_PSI",
+                          "Micro_DMSO_3_PSI","iNeuron_PSI_CHX","iNeuron_PSI_DMSO","iPSC_PSI_CHX","iPSC_PSI_DMSO","Astro_PSI_CHX",
+                          "Astro_PSI_DMSO","Micro_PSI_CHX","Micro_PSI_DMSO","avg_PSI","sd_PSI","gene_coverage_Ensembl",
+                          "gene_coverage_RefSeq","gene_coverage_Microglia_DMSO","gene_coverage_iPSC_DMSO","gene_coverage_Microglia_CHX",
+                          "gene_coverage_Astrocyte_CHX","gene_coverage_iPSC_CHX","gene_coverage_Astrocyte_DMSO","gene_coverage_iNeuron_CHX",
+                          "gene_coverage_iNeuron_D")
+        
+        
+        dt
+        #DT::datatable(dt, options = list(scrollX = TRUE))
+      })
+      
+      #create NMD table to show
+      output$NMD_table <- DT::renderDT({
+        req(nmd_table_filtered())
+        dt <- nmd_table_filtered()
         dt$event_id <- paste0(
           '<a href="#" onclick="Shiny.setInputValue(\'selected_event\', \'', dt$event_id, '\', {priority: \'event\'});">',
           dt$event_id,
@@ -138,7 +184,7 @@ nmd_event_per_gene_server <- function(id) {
                                        "  $(thead).find('th').eq(9).attr('title','Standard deviation of the PSI values(%) of all samples (iPSCs, iNeurons, Astrocytes and Microglia treated with CHX or DMSO');",
                                        "}"
                                      )
-                                     ),
+                      ),
                       colnames = c(
                         "Event type",
                         "Event ID",
@@ -150,7 +196,6 @@ nmd_event_per_gene_server <- function(id) {
                         "Average PSI (%)",
                         "Standard deviation PSI (%)"
                       ))
-        #DT::datatable(dt, options = list(scrollX = TRUE))
       })
       
       #plot short read coverage
@@ -187,7 +232,50 @@ nmd_event_per_gene_server <- function(id) {
                 axis.text.x = element_text(angle = 45, hjust = 1)) +
           ggtitle("Short-read (SR) gene coverage")
       })
+      
+      #download short table
+      output$download_nmd_event_per_gene_table <- downloadHandler(
+        filename = function() {
+          paste0(input$nmd_gene, "_NMD_events.csv")
+        },
+        content = function(file) {
+          df <- nmd_table_filtered()
+          req(df)
+          if ("event_id" %in% names(df)) {
+            df$event_id <- gsub("<.*?>", "", df$event_id)   # remove any tags
+          }
+          write.csv(df, file, row.names = FALSE)
+          }
+        )
+      
+      #download extended table
+      output$download_nmd_event_per_gene_full_table <- downloadHandler(
+        filename = function() {
+          paste0(input$nmd_gene, "_NMD_events_extended_table.csv")
+        },
+        content = function(file) {
+          df <- nmd_table_filtered_extended()
+          req(df)
+          if ("event_id" %in% names(df)) {
+            df$event_id <- gsub("<.*?>", "", df$event_id)   # remove any tags
+          }
+          write.csv(df, file, row.names = FALSE)
+        }
+      )
+      
+      
+      output$data_ready <- renderText({
+        if (!is.null(nmd_table_filtered()) & !is.null(nmd_table_filtered_extended())) {
+          "true"
+        } else {
+          "false"
+        }
+      })
+      
+      outputOptions(output, "data_ready", suspendWhenHidden = FALSE)
+      
     })
+    
     output$message_NMD_event_per_gene <- renderUI({
       gene_msg()
     })
