@@ -119,12 +119,11 @@ nmd_event_per_gene_server <- function(id) {
                                        NMD_table_for_app_gene$NMD_exclusive %in% selected_NMD_only &
                                        NMD_table_for_app_gene$event_type %in% selected_event_types,]
         cols_to_remove <- paste0("pos", 1:8)
-        dt <- dt %>% dplyr::select(-all_of(cols_to_remove), -avg_PSI.1, -sd_PSI.1)
+        dt <- dt %>% dplyr::select(-all_of(cols_to_remove))
         
         dt$perc_region_avg <- round(dt$perc_region_avg*100)
         dt$avg_PSI <- round(dt$avg_PSI*100, digits = 1)
         dt$sd_PSI <- round(dt$sd_PSI*100, digits = 1)
-        
         colnames(dt) <- c("event_type","chrom","strand","event_id","NMD_sister_transcript","NMD_exclusive",
                           "hgnc_name","hgnc_id","relative_event_coverage_iNeuron_CHX","relative_event_coverage_iNeuron_DMSO","relative_event_coverage_iPSC_CHX",
                           "relative_event_coverage_4_iPSC_DMSO","relative_event_coverage_Astrocyte_CHX","relative_event_coverage_Astrocyte_DMSO","relative_event_coverage_Microglia_CHX",
@@ -134,10 +133,10 @@ nmd_event_per_gene_server <- function(id) {
                           "Astro_CHX_2_PSI","Astro_CHX_3_PSI","Astro_DMSO_1_PSI","Astro_DMSO_2_PSI","Astro_DMSO_3_PSI",
                           "Micro_CHX_1_PSI","Micro_CHX_2_PSI","Micro_CHX_3_PSI","Micro_DMSO_1_PSI","Micro_DMSO_2_PSI",
                           "Micro_DMSO_3_PSI","iNeuron_PSI_CHX","iNeuron_PSI_DMSO","iPSC_PSI_CHX","iPSC_PSI_DMSO","Astro_PSI_CHX",
-                          "Astro_PSI_DMSO","Micro_PSI_CHX","Micro_PSI_DMSO","avg_PSI","sd_PSI","gene_coverage_Ensembl",
+                          "Astro_PSI_DMSO","Micro_PSI_CHX","Micro_PSI_DMSO","gene_coverage_Ensembl",
                           "gene_coverage_RefSeq","gene_coverage_Microglia_DMSO","gene_coverage_iPSC_DMSO","gene_coverage_Microglia_CHX",
                           "gene_coverage_Astrocyte_CHX","gene_coverage_iPSC_CHX","gene_coverage_Astrocyte_DMSO","gene_coverage_iNeuron_CHX",
-                          "gene_coverage_iNeuron_D")
+                          "gene_coverage_iNeuron_DMSO","avg_PSI","sd_PSI", "NMD_sister_transcript_summary", "NMD_exclusive_summary")
         
         
         dt

@@ -53,6 +53,32 @@ event_details_server <- function(id, selected_event) {
       event_type <- row$event_type
       chrom <- row$chrom
       strand <- row$strand
+      print(row)
+      # event details
+      output$event_details_print <- renderUI({
+        fluidRow(
+          column(
+            width = 12,
+            wellPanel(
+              style = "background-color: #f9f9f9; border: 1px solid #ccc;",
+              tags$strong("NMD-prediction (splice-context aware method): "), 
+              tags$br(),
+              tags$span(row$NMD_sister_transcript_summary),
+              tags$br(),
+              tags$span("Conclusion: "),
+              tags$strong(row$NMD_sister_transcript),
+              tags$br(),
+              tags$br(),
+              tags$strong("NMD-prediction (NMD-exclusive method): "), 
+              tags$br(),
+              tags$span(row$NMD_exclusive_summary),
+              tags$br(),
+              tags$span("Conclusion: "),
+              tags$strong(row$NMD_exclusive),
+            )
+          )
+        )
+      })
       
       # PSI plot
       PSI_df <- get_PSI_event_data(row)
@@ -62,7 +88,6 @@ event_details_server <- function(id, selected_event) {
       output$event_psi_DT <- DT::renderDT({
         DT::datatable(get_PSI_table_for_printing(PSI_df), escape = FALSE, options = list(scrollX = TRUE))
       })
-      
       
       # Junction plots
       junction_event_data <- get_junction_event_data(event, event_type, row, junction_summary_for_app, strand) ##gets junction data
@@ -80,7 +105,6 @@ event_details_server <- function(id, selected_event) {
         req(selected_event_id())  # show only after click
         checkboxInput(session$ns("show_related_junctions"), "Show related junctions in region", FALSE)
       })
-      
       
       # Related junctions table
       output$related_junction_DT <- DT::renderDT({

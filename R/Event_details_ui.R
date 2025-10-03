@@ -17,6 +17,13 @@ event_details_ui <- function(id) {
                )
              ),
              
+             #NMD_prediction/event details 
+             fluidRow(
+               column(width = 11,
+                      uiOutput(ns("event_details_print"))
+                      )
+               ),
+             
              # PSI plot
              fluidRow(
                column(width = 5, plotOutput(ns("event_PSI_plot"), height = "500px")),
