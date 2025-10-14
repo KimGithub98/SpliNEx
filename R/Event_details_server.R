@@ -154,7 +154,7 @@ event_details_server <- function(id, selected_event) {
       event <- selected_event_id()
       row <- NMD_table_for_app[NMD_table_for_app$event_id == event, ]
       url <- get_ucsc_url(event, row$event_type, row$chrom)
-      browseURL(url)
+      #browseURL(url)
       shinyjs::disable("go_button") 
     })
     ##outputs message if event not found

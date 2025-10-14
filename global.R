@@ -1,5 +1,6 @@
-script_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
-setwd(script_dir)
+#script_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
+#setwd(script_dir)
+setwd("C:/Users/Z978196/OneDrive - Radboudumc/z978196/R/Shiny Apps/NMD_event lookup structured")
 library(shiny)
 library(shinythemes)
 library(ggplot2)
@@ -9,13 +10,13 @@ library(stringr)
 library(shinyjs)
 library(RColorBrewer)
 library(bslib)
-source(paste(script_dir,"/R/Event_details_functions.R", sep = ""))
+source("R/Event_details_functions.R")
 
 #-------------Load data ------------------------------
-normalized_counts_df <- read.csv(file.path(script_dir, "/data/SR_sofia_Kim_WTC_normalized_reads.csv"),row.names = 1)
-colData_df <- read.csv(file.path(script_dir, "/data/SR_sofia_Kim_WTC_normalized_reads_col_data.csv"),row.names = 1)
-NMD_table_for_app <- read.csv(file.path(script_dir, "/data/NMD_table_for_app_Astro_micro.csv"))
-junction_summary_for_app <- read.csv(file.path(script_dir, "/data/junction_table_for_app_Astro_micro.csv"))
+normalized_counts_df <- readRDS("data/normalized_counts_df.rds")
+colData_df <- readRDS("data/colData_df.rds")
+NMD_table_for_app <- readRDS("data/NMD_table_for_app.rds")
+junction_summary_for_app <- readRDS("data/junction_summary_for_app.rds")
 
 #-------------Global variables -----------------------
 sample_names <- names(normalized_counts_df)

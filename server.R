@@ -13,4 +13,8 @@ server <- function(input, output, session) {
   observeEvent(input$selected_event, {
     updateTabsetPanel(session, "main_tabs", selected = "Event details")
   })
+  
+  observe({
+    print(paste("Memory used:", pryr::mem_used() / 1024^2, "MB"))
+  })
 }
