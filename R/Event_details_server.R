@@ -41,7 +41,7 @@ event_details_server <- function(id, selected_event = selected_event,parent_sess
       req(clicked_junction())
       selected_event_id(clicked_junction())  # update reactive
       updateTextInput(session, "event_input", value = clicked_junction())
-      updateTabsetPanel(session, "main_tabs", selected = "Event details")
+      updateTabsetPanel(parent_session, "main_tabs", selected = "nmd_event_details")
     })
     
     # --- react to selected_event_id to generate plots/tables ---
