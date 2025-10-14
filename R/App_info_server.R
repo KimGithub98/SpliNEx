@@ -95,7 +95,7 @@ App_info_server <- function(id, parent_session) {
                 tags$li("Event ID & AS event type:"),
                 tags$p(
                   "A unique identifier for each alternative splicing event, specifying its gene, genomic coordinates, AS event type and strand, as defined by the SUPPA tool. A detailed explanation of the event ID and the different AS event types can be found at the",
-                  actionLink("link", "SUPPA github page")
+                  tags$a("SUPPA GitHub page", href = "https://github.com/comprna/SUPPA", target = "_blank")
                 ),
                 
                 tags$li("Percentage spliced in (PSI)"),

@@ -43,14 +43,18 @@ wtc_gene_expression_ui <- function(id) {
              )
            ),
            hr(),
-           HTML("
-           <b>References & data sources:</b><br>
-           1. Wijnant et al. 2025<br>
-           2. Leonardi O et al. CHD2 Dosage Ties Autolysosomal Pathway to Cortical Maturation in Disease and Evolution. bioRxiv. 2025 Jan 21. doi: https://doi.org/10.1101/2025.01.21.634145.<br>
-           3. Emma et al. 2025<br>
-           4. Hommersom MP et al. CACNA1A haploinsufficiency leads to reduced synaptic function and increased intrinsic excitability. Brain. 2025 Apr 3;148(4):1286-1301. doi: 10.1093/brain/awae330. PMID: 39460936; PMCID: PMC11969466.<br>
-           5. Yuan X et al. A human in vitro neuronal model for studying homeostatic plasticity at the network level. Stem Cell Reports. 2023 Nov 14;18(11):2222-2239. doi: 10.1016/j.stemcr.2023.09.011. Epub 2023 Oct 19. PMID: 37863044; PMCID: PMC10679660.<br><br>
-           <b>Please cite: Wijnant et al. 2025</b><br>
-           Build with Shiny & Shinythemes in R version 4.4.1")
+           tags$div(
+             tags$b("References & data sources:"), tags$br(),
+             "1. ", tags$a("Wijnant et al. 2025", href = "https://doi.org/YOUR_DOI_1", target = "_blank"), tags$br(),
+             "2. ", tags$a("Leonardi O et al. CHD2 Dosage Ties Autolysosomal Pathway to Cortical Maturation in Disease and Evolution. bioRxiv. 2025 Jan 21.", 
+                           href = "https://doi.org/10.1101/2025.01.21.634145", target = "_blank"), tags$br(),
+             "3. ", tags$a("Emma et al. 2025", href = "https://doi.org/YOUR_DOI_3", target = "_blank"), tags$br(),
+             "4. ", tags$a("Hommersom MP et al. CACNA1A haploinsufficiency leads to reduced synaptic function and increased intrinsic excitability. Brain. 2025 Apr 3;148(4):1286-1301.", 
+                           href = "https://doi.org/10.1093/brain/awae330", target = "_blank"), tags$br(),
+             "5. ", tags$a("Yuan X et al. A human in vitro neuronal model for studying homeostatic plasticity at the network level. Stem Cell Reports. 2023 Nov 14;18(11):2222-2239.", 
+                           href = "https://doi.org/10.1016/j.stemcr.2023.09.011", target = "_blank"), tags$br(), tags$br(),
+             tags$b("Please cite: Wijnant et al. 2025"), tags$br(),
+             "Build with Shiny & Shinythemes in R version 4.4.1"
+           )
   )
 }
