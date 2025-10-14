@@ -1,7 +1,7 @@
 pretty_names <- c(
   "Astrocytes (CHX, Wijnant et al. 2025)"   = "WTC_Astrocytes_CHX_K",
   "Astrocytes (DMSO, Wijnant et al. 2025)"  = "WTC_Astrocytes_DMSO_K",
-  "DIV21 Neurons (Elly et al. 2025)"      = "WTC_DIV21_S",
+  "DIV21 Neurons (Leonardi et al. 2025)"      = "WTC_DIV21_S",
   "DIV28 Neurons (Emma et al. 2025)"      = "WTC_DIV28_S",
   "DIV49 Neurons (Hommersom et al. 2025)" = "WTC_DIV49_batch1_S",
   "DIV49 Neurons (Yuan et al. 2025)" = "WTC_DIV49_batch2_S",
@@ -46,7 +46,7 @@ wtc_gene_expression_ui <- function(id) {
            HTML("
            <b>References & data sources:</b><br>
            1. Wijnant et al. 2025<br>
-           2. Elly et al. 2025<br>
+           2. Leonardi O et al. CHD2 Dosage Ties Autolysosomal Pathway to Cortical Maturation in Disease and Evolution. bioRxiv. 2025 Jan 21. doi: https://doi.org/10.1101/2025.01.21.634145.<br>
            3. Emma et al. 2025<br>
            4. Hommersom MP et al. CACNA1A haploinsufficiency leads to reduced synaptic function and increased intrinsic excitability. Brain. 2025 Apr 3;148(4):1286-1301. doi: 10.1093/brain/awae330. PMID: 39460936; PMCID: PMC11969466.<br>
            5. Yuan X et al. A human in vitro neuronal model for studying homeostatic plasticity at the network level. Stem Cell Reports. 2023 Nov 14;18(11):2222-2239. doi: 10.1016/j.stemcr.2023.09.011. Epub 2023 Oct 19. PMID: 37863044; PMCID: PMC10679660.<br><br>
