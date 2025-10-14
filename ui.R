@@ -1,5 +1,6 @@
 fluidPage(
   theme = shinytheme("flatly"),
+  useShinyjs(),
   
   navbarPage(title = img(src = "SpliNEx_small_logo.png", height = "30px"),
              id = "main_tabs",
