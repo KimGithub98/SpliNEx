@@ -1,4 +1,4 @@
-event_details_server <- function(id, selected_event) {
+event_details_server <- function(id, selected_event = selected_event,parent_session = session) {
   moduleServer(id, function(input, output, session) {
     event_msg <- reactiveVal(NULL)
     selected_event_id <- reactiveVal(NULL)
@@ -14,13 +14,12 @@ event_details_server <- function(id, selected_event) {
       "Micro.CHX" = colorspace::darken("burlywood4", 0.3)
     )
     
-    
     # Update reactive when user clicks in NMD tab
     observeEvent(selected_event(), {
       event_msg(NULL)
       selected_event_id(selected_event())
       updateTextInput(session, "event_input", value = selected_event())
-      updateTabsetPanel(session, "main_tabs", selected = "Event details")
+      updateTabsetPanel(parent_session, "main_tabs", selected = "nmd_event_details")
     })
     
     # Update reactive when user submits an event manually

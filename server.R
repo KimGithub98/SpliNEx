@@ -10,7 +10,7 @@ server <- function(input, output, session) {
   
   #tab3 nmd event details
   selected_event <- reactive({input$selected_event})  
-  event_details_server("nmd_event_details", selected_event = reactive(input$selected_event))
+  event_details_server("nmd_event_details", selected_event = reactive(input$selected_event), parent_session = session)
   
   #auto switch from nmd_event_per_gene tab to nmd_event_detail tab when clicked
   observeEvent(input$selected_event, {

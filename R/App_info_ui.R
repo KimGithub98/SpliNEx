@@ -10,6 +10,8 @@ App_info_ui <- function(id) {
            ),
            uiOutput(ns("citation_request")),
            uiOutput(ns("splinex_features")),
+           uiOutput(ns("data_generation")),
+           uiOutput(ns("explenation_concepts")),
            hr(),
            HTML("
            <b>References & data sources:</b><br>

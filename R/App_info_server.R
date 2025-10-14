@@ -48,7 +48,6 @@ App_info_server <- function(id, parent_session) {
     
     ##navigate to other tabs
     observeEvent(input$go_gene_expression_page, {
-
       updateTabsetPanel(parent_session, "main_tabs", selected = "wtc")
     })
     observeEvent(input$go_event_per_gene_page_1, {
@@ -60,6 +59,46 @@ App_info_server <- function(id, parent_session) {
     observeEvent(input$go_event_detail_page, {
       updateTabsetPanel(parent_session, "main_tabs", selected = "nmd_event_details")
     })
+    
+    ##Data generation and explanation
+    output$data_generation <- renderUI({
+      fluidRow(
+        column(
+          width = 12,
+          wellPanel(
+            style = "background-color: #ffffff; ",
+            tags$strong("Alternative splicing data generation:"),
+            tags$div(style = "margin-top: 10px;"),
+            tags$p(
+              "Alternative splicing events were identified using long-read sequencing data from iPSC-derived iNeurons, astrocytes, and microglia, 
+   and their quantification was based on short-read sequencing data. 
+   For a detailed explanation of alternative splicing data generation: ",
+              actionLink("link", "[Wijnant et al. 2025]")
+            ),
+            img(src = "Data_generation.png", height = "400px"),
+          )
+        )
+      )
+    })
+    
+    ##Explenation of concepts and 
+    output$explenation_concepts <- 
+      renderUI({
+        fluidRow(
+          column(
+            width = 12,
+            wellPanel(
+              style = "background-color: #ffffff; ",
+              tags$strong("Key concepts & terms used in this app:"),
+              tags$div(style = "margin-top: 10px;"),
+              tags$ul(
+                tags$li("bla"),
+                tags$li("bla"),
+            )
+          )
+        )
+        )
+      })
     
   })
 }
