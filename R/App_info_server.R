@@ -1,0 +1,66 @@
+App_info_server <- function(id, parent_session) {
+  moduleServer(id, function(input, output, session) {
+    ns <- session$ns
+    ##citation information
+    output$citation_request <- renderUI({
+      fluidRow(
+        column(
+          width = 12,
+          wellPanel(
+            style = "background-color: #f9f9f9;",
+            tags$strong("Please cite: "), 
+            tags$span("Wijnant KN et al. Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery. Journal. Year Month date; Pages. doi: #. PMID: #; PMCID: #."),
+          )
+        )
+      )
+    })
+    
+    ## SpliNEx usage
+    output$splinex_features <- renderUI({
+      fluidRow(
+      column(
+        width = 12,
+        wellPanel(
+          style = "background-color: #ffffff; ",
+          tags$strong("Use SpliNEx to:"),
+          tags$div(style = "margin-top: 10px;"),
+            tags$ul(
+              tags$li("Explore gene expression in wild-type iPSC-derived iNeurons, astrocytes, and microglia", 
+                      actionLink(ns("go_gene_expression_page"), "[view expression for gene]")),
+              tags$li("Search for alternative splicing events identified by long-read sequencing",
+                      actionLink(ns("go_event_per_gene_page_1"), "[view AS events for gene]")),
+              tags$li("Access detailed information on alternative splice events",
+                      actionLink(ns("go_event_per_gene_page_2"), "[view AS events for gene]"),
+                      "or",
+                      actionLink(ns("go_event_detail_page"), "[view AS event details for AS event id]"),
+                      ", including:",
+                      tags$ul(
+                        tags$li("Estimated usage of each splice event across iPSC-derived cells of the brain"),
+                        tags$li("Predictions of NMD-sensitive alternative splicing"),
+                        tags$li("Related splice junctions and alternative splice events in the same genomic region")
+                      )
+              )
+            )
+        )
+      )
+    )
+    })
+    
+    ##navigate to other tabs
+    observeEvent(input$go_gene_expression_page, {
+
+      updateTabsetPanel(parent_session, "main_tabs", selected = "wtc")
+    })
+    observeEvent(input$go_event_per_gene_page_1, {
+      updateTabsetPanel(parent_session, "main_tabs", selected = "nmd_event")
+    })
+    observeEvent(input$go_event_per_gene_page_2, {
+      updateTabsetPanel(parent_session, "main_tabs", selected = "nmd_event")
+    })
+    observeEvent(input$go_event_detail_page, {
+      updateTabsetPanel(parent_session, "main_tabs", selected = "nmd_event_details")
+    })
+    
+  })
+}
+

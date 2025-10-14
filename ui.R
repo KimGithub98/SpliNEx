@@ -1,13 +1,23 @@
 fluidPage(
   theme = shinytheme("flatly"),
   
-  navbarPage("My App",
+  navbarPage(title = img(src = "SpliNEx_small_logo.png", height = "30px"),
              id = "main_tabs",
+             #info tab
+             tabPanel(title = "Info", value = "info",
+                      App_info_ui("app_info")  # keep the module UI inside
+             ),
              #tab1 wtc gene expression
-             wtc_gene_expression_ui("wtc"),
+             tabPanel(title = "Gene Expression", value = "wtc",
+                      wtc_gene_expression_ui("wtc")
+             ),
              #tab2 nmd event per gene
-             nmd_event_per_gene_ui("nmd_event"),
+             tabPanel(title = "Alternative splicing", value = "nmd_event",
+                      nmd_event_per_gene_ui("nmd_event")
+             ),
              #tab3 nmd event details
-             event_details_ui("nmd_event_details")
+             tabPanel(title = "AS event details", value = "nmd_event_details",
+                      event_details_ui("nmd_event_details")
+             )
   )
 )

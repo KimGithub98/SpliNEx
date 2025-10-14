@@ -1,5 +1,8 @@
 server <- function(input, output, session) {
   #tab1 wtc gene expression
+  App_info_server("app_info", parent_session = session)
+  
+  #tab1 wtc gene expression
   wtc_gene_expression_server("wtc")
   
   #tab2 nmd event per gene
