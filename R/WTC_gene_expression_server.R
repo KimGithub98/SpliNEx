@@ -67,11 +67,19 @@ wtc_gene_expression_server <- function(id) {
     )
     
     output$download_gene_exp_plot_svg <- downloadHandler(
-      filename = function(){
+      filename = function() {
         paste0("Gene_expression_", input$wtc_gene, ".svg")
       },
-      content = function(file){
-        ggsave(file, plot = wtc_gene_plot(), device = svglite::svglite)
+      content = function(file) {
+        # Save SVG with explicit window_title to avoid the warning
+        svglite::svglite(
+          filename = file,
+          width = 6,
+          height = 4
+        )
+        
+        print(wtc_gene_plot())  # actually draw the plot into the device
+        dev.off()               # close the SVG device
       }
     )
     

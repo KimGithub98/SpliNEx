@@ -180,149 +180,129 @@ get_junction_event_data <- function(event, event_type, row, junction_summary_for
         intron_exon == "intron" ~ y - 0.12
       )
     )
-  exon_df <- left_join(exon_df, junction_df[,c("group_id_sample", "cell", "treatment")], by = c("y" = "group_id_sample"))
+  exon_df <- left_join(exon_df, junction_df[,c("group_id_sample", "cell", "treatment")], by = c("y" = "group_id_sample"), relationship = "many-to-many")
   return(list("junction_df" = junction_df, "region_junction_df"= region_junction_df, "exon_df" = exon_df ))
-
 }
 
 get_faux_sashimi_plot <- function(event_type, junction_df, region_junction_df, x_axis_label, exon_df, fill_colors, show_all_junctions_in_region){
-  if (event_type == "RI"){
-    p <- ggplot(data = junction_df, aes(color = interaction(cell, treatment))) +
+  if (show_all_junctions_in_region){
+    # Automatically generate colors for all unique event_ids
+    unique_events <- unique(region_junction_df$event_id)
+    
+    # Option 1: Using RColorBrewer (good for up to ~12 events)
+    n_colors <- length(unique_events)
+    if (n_colors <= 12) {
+      event_colors <- brewer.pal(n_colors, "Pastel1")
+    } else {
+      # fallback to hue palette if more than 12
+      event_colors <- hue_pal()(n_colors)
+    }
+    names(event_colors) <- unique_events
+    p <- ggplot(data = junction_df) +
       # Coverage plot
       #geom_ribbon(data = all_df_per_base, aes(x = pos, ymax = cov, ymin = ymin, fill = bam_file, group = bam_file, alpha = 0.3), color = NA) +
       scale_size(range = c(0.5, 2)) +
       labs(x = x_axis_label, y = "Coverage") +
       theme_classic() +
+      #arches
+      geom_segment(
+        aes(x = start, xend = end, y = y_pos, yend = y_pos, size = log_count_group), color = "black"
+      ) +
+      geom_segment(
+        data = junction_df,
+        aes(x = start, xend = start, y = y_pos, yend = group_id_sample , size = log_count_group), color = "black"
+      ) +
+      geom_segment(
+        data = junction_df,
+        aes(x = end, xend = end, y = y_pos, yend = group_id_sample , size = log_count_group), color = "black"
+      ) +
+      geom_label(data = junction_df,aes(x = xpos, y = y_pos, label = label), color = "black", fill = "white") +
+      #scale_color_manual(values = fill_colors, name = NULL) +
+      #related arches
+      geom_segment(
+        data = region_junction_df,
+        aes(x = start, xend = end, y = y_pos, yend = y_pos, size = log_count_group, color = event_id),
+        inherit.aes = FALSE, show.legend = FALSE
+      ) +
+      geom_segment(
+        data = region_junction_df,
+        aes(x = start, xend = start, y = y_pos, yend = group_id_sample- 0.2 , size = log_count_group, color = event_id),
+        inherit.aes = FALSE, show.legend = FALSE
+      ) +
+      geom_segment(
+        data = region_junction_df,
+        aes(x = end, xend = end, y = y_pos, yend = group_id_sample- 0.2 , size = log_count_group, color = event_id),
+        inherit.aes = FALSE, show.legend = FALSE
+      ) +
+      geom_label(data = region_junction_df,aes(x = xpos, y = y_pos, label = label, color = event_id), fill = "white", show.legend = FALSE) +
+      scale_color_manual(values = c(fill_colors, event_colors)) +  # separate palettes for cell/treatment and event_id
+      scale_fill_manual(values = fill_colors, name = NULL) +
       theme(
         strip.text = element_blank(),
-        legend.position = "bottom",
+        legend.position = "none",
         legend.text = element_text(size = 14),
-        axis.text = element_blank(),
-        axis.title = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 18)
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 14),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        axis.line.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.text.y = element_blank(), 
+        axis.title.y = element_blank()
       ) +
+      geom_text(data = region_junction_df %>% filter(start == min(start)) %>% dplyr::select(start, group_id_sample, cell, treatment) %>% distinct(),  aes(y = group_id_sample, x = as.numeric(start)-30, label = paste(cell, treatment)),
+                hjust = 1,  # 0 = left-aligned, 1 = right-aligned
+                vjust = 0.5, # vertically centered
+                size = 3) +
       #exons_introns
-      annotate("text", x = 1, y = 1, label = "Faux-sashimi cannot be created for RI events", size = 8) +
-      ggtitle("Faux-sashimi selected event")
+      geom_rect(data = exon_df, aes(xmin = as.numeric(xmin), xmax = as.numeric(xmax), ymin = as.numeric(ymin), ymax = as.numeric(ymax), fill = interaction(cell, treatment))) + 
+      ggtitle("Faux-sashimi selected event") +
+      coord_cartesian(clip = "off")
+    #coord_cartesian(xlim = c(min(as.numeric(exon_df$xmin), na.rm = TRUE), max(as.numeric(exon_df$xmin), na.rm = TRUE)))
   } else {
-    if (show_all_junctions_in_region){
-      # Automatically generate colors for all unique event_ids
-      unique_events <- unique(region_junction_df$event_id)
-      
-      # Option 1: Using RColorBrewer (good for up to ~12 events)
-      n_colors <- length(unique_events)
-      if (n_colors <= 12) {
-        event_colors <- brewer.pal(n_colors, "Pastel1")
-      } else {
-        # fallback to hue palette if more than 12
-        event_colors <- hue_pal()(n_colors)
-      }
-      names(event_colors) <- unique_events
-      p <- ggplot(data = junction_df) +
-        # Coverage plot
-        #geom_ribbon(data = all_df_per_base, aes(x = pos, ymax = cov, ymin = ymin, fill = bam_file, group = bam_file, alpha = 0.3), color = NA) +
-        scale_size(range = c(0.5, 2)) +
-        labs(x = x_axis_label, y = "Coverage") +
-        theme_classic() +
-        #arches
-        geom_segment(
-          aes(x = start, xend = end, y = y_pos, yend = y_pos, size = log_count_group), color = "black"
-        ) +
-        geom_segment(
-          data = junction_df,
-          aes(x = start, xend = start, y = y_pos, yend = group_id_sample , size = log_count_group), color = "black"
-        ) +
-        geom_segment(
-          data = junction_df,
-          aes(x = end, xend = end, y = y_pos, yend = group_id_sample , size = log_count_group), color = "black"
-        ) +
-        geom_label(data = junction_df,aes(x = xpos, y = y_pos, label = label), color = "black", fill = "white") +
-        #scale_color_manual(values = fill_colors, name = NULL) +
-        #related arches
-        geom_segment(
-          data = region_junction_df,
-          aes(x = start, xend = end, y = y_pos, yend = y_pos, size = log_count_group, color = event_id),
-          inherit.aes = FALSE, show.legend = FALSE
-        ) +
-        geom_segment(
-          data = region_junction_df,
-          aes(x = start, xend = start, y = y_pos, yend = group_id_sample- 0.2 , size = log_count_group, color = event_id),
-          inherit.aes = FALSE, show.legend = FALSE
-        ) +
-        geom_segment(
-          data = region_junction_df,
-          aes(x = end, xend = end, y = y_pos, yend = group_id_sample- 0.2 , size = log_count_group, color = event_id),
-          inherit.aes = FALSE, show.legend = FALSE
-        ) +
-        geom_label(data = region_junction_df,aes(x = xpos, y = y_pos, label = label, color = event_id), fill = "white", show.legend = FALSE) +
-        scale_color_manual(values = c(fill_colors, event_colors)) +  # separate palettes for cell/treatment and event_id
-        scale_fill_manual(values = fill_colors, name = NULL) +
-        theme(
-          strip.text = element_blank(),
-          legend.position = "none",
-          legend.text = element_text(size = 14),
-          axis.text = element_text(size = 12),
-          axis.title = element_text(size = 14),
-          plot.title = element_text(hjust = 0.5, size = 18),
-          axis.line.y = element_blank(), 
-          axis.ticks.y = element_blank(), 
-          axis.text.y = element_blank(), 
-          axis.title.y = element_blank()
-        ) +
-        geom_text(data = region_junction_df %>% filter(start == min(start)) %>% dplyr::select(start, group_id_sample, cell, treatment) %>% distinct(),  aes(y = group_id_sample, x = as.numeric(start)-30, label = paste(cell, treatment)),
-                  hjust = 1,  # 0 = left-aligned, 1 = right-aligned
-                  vjust = 0.5, # vertically centered
-                  size = 3) +
-        #exons_introns
-        geom_rect(data = exon_df, aes(xmin = as.numeric(xmin), xmax = as.numeric(xmax), ymin = as.numeric(ymin), ymax = as.numeric(ymax), fill = interaction(cell, treatment))) + 
-        ggtitle("Faux-sashimi selected event") +
-        coord_cartesian(clip = "off")
-        #coord_cartesian(xlim = c(min(as.numeric(exon_df$xmin), na.rm = TRUE), max(as.numeric(exon_df$xmin), na.rm = TRUE)))
-    } else {
-      p <- ggplot(data = junction_df) +
-        # Coverage plot
-        #geom_ribbon(data = all_df_per_base, aes(x = pos, ymax = cov, ymin = ymin, fill = bam_file, group = bam_file, alpha = 0.3), color = NA) +
-        scale_size(range = c(0.5, 2)) +
-        labs(x = x_axis_label, y = "Coverage") +
-        theme_classic() +
-        #arches
-        geom_segment(
-          aes(x = start, xend = end, y = y_pos, yend = y_pos, size = log_count_group, color = interaction(cell, treatment))
-        ) +
-        geom_segment(
-          data = junction_df,
-          aes(x = start, xend = start, y = y_pos, yend = group_id_sample , size = log_count_group, color = interaction(cell, treatment))
-        ) +
-        geom_segment(
-          data = junction_df,
-          aes(x = end, xend = end, y = y_pos, yend = group_id_sample , size = log_count_group, color = interaction(cell, treatment))
-        ) +
-        geom_label(data = junction_df,aes(x = xpos, y = y_pos, label = label, color = interaction(cell, treatment)), fill = "white") +
-        scale_color_manual(values = fill_colors, name = NULL) +
-        scale_fill_manual(values = fill_colors, name = NULL) +
-        theme(
-          strip.text = element_blank(),
-          legend.position = "none",
-          legend.text = element_text(size = 14),
-          axis.text = element_text(size = 12),
-          axis.title = element_text(size = 14),
-          plot.title = element_text(hjust = 0.5, size = 18),
-          axis.line.y = element_blank(), 
-          axis.ticks.y = element_blank(), 
-          axis.text.y = element_blank(), 
-          axis.title.y = element_blank()
-        ) +
-        geom_text(data = exon_df %>% filter(xmin == min(xmin), intron_exon == "exon") %>% distinct(), aes(y = ymin, x = as.numeric(xmin), label = paste(cell, treatment), color = interaction(cell, treatment)),
-                  hjust = 1,  # 0 = left-aligned, 1 = right-aligned
-                  vjust = 0, # vertically centered
-                  size = 3) +
-        #exons_introns
-        geom_rect(data = exon_df, aes(xmin = as.numeric(xmin), xmax = as.numeric(xmax), ymin = as.numeric(ymin), ymax = as.numeric(ymax), fill = interaction(cell, treatment))) + 
-        ggtitle("Faux-sashimi selected event") +
-        coord_cartesian(xlim = c(min(as.numeric(exon_df$xmin), na.rm = TRUE), max(as.numeric(exon_df$xmin), na.rm = TRUE)), clip = "off")
-    }
-    
+    p <- ggplot(data = junction_df) +
+      # Coverage plot
+      #geom_ribbon(data = all_df_per_base, aes(x = pos, ymax = cov, ymin = ymin, fill = bam_file, group = bam_file, alpha = 0.3), color = NA) +
+      scale_size(range = c(0.5, 2)) +
+      labs(x = x_axis_label, y = "Coverage") +
+      theme_classic() +
+      #arches
+      geom_segment(
+        aes(x = start, xend = end, y = y_pos, yend = y_pos, size = log_count_group, color = interaction(cell, treatment))
+      ) +
+      geom_segment(
+        data = junction_df,
+        aes(x = start, xend = start, y = y_pos, yend = group_id_sample , size = log_count_group, color = interaction(cell, treatment))
+      ) +
+      geom_segment(
+        data = junction_df,
+        aes(x = end, xend = end, y = y_pos, yend = group_id_sample , size = log_count_group, color = interaction(cell, treatment))
+      ) +
+      geom_label(data = junction_df,aes(x = xpos, y = y_pos, label = label, color = interaction(cell, treatment)), fill = "white") +
+      scale_color_manual(values = fill_colors, name = NULL) +
+      scale_fill_manual(values = fill_colors, name = NULL) +
+      theme(
+        strip.text = element_blank(),
+        legend.position = "none",
+        legend.text = element_text(size = 14),
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 14),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        axis.line.y = element_blank(), 
+        axis.ticks.y = element_blank(), 
+        axis.text.y = element_blank(), 
+        axis.title.y = element_blank()
+      ) +
+      geom_text(data = exon_df %>% filter(xmin == min(xmin), intron_exon == "exon") %>% distinct(), aes(y = ymin, x = as.numeric(xmin), label = paste(cell, treatment), color = interaction(cell, treatment)),
+                hjust = 1,  # 0 = left-aligned, 1 = right-aligned
+                vjust = 0, # vertically centered
+                size = 3) +
+      #exons_introns
+      geom_rect(data = exon_df, aes(xmin = as.numeric(xmin), xmax = as.numeric(xmax), ymin = as.numeric(ymin), ymax = as.numeric(ymax), fill = interaction(cell, treatment))) + 
+      ggtitle("Faux-sashimi selected event") +
+      coord_cartesian(xlim = c(min(as.numeric(exon_df$xmin), na.rm = TRUE), max(as.numeric(exon_df$xmin), na.rm = TRUE)), clip = "off")
   }
+  
+    
   return(p)
 }
 

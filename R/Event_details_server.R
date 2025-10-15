@@ -109,9 +109,16 @@ event_details_server <- function(id, selected_event = selected_event,parent_sess
         junction_event_data_val(junction_event_data)
       }
       
+      ##gives checkbox to view related junctions
+      output$checkbox_related_junctions <- renderUI({
+        req(selected_event_id())  # show only after click
+        checkboxInput(session$ns("show_related_junctions"), "Show related junctions in region", FALSE)
+      })
+      
       ##gets sashimi plot
       output$Faux_sashimi_plot <- renderPlot({
         req(selected_event_id())
+        
         if (event_type == "RI") {
           plot.new()  # create empty plot
           text(
@@ -121,18 +128,21 @@ event_details_server <- function(id, selected_event = selected_event,parent_sess
             cex = 1.5
           )
         } else {
-          show_all_junctions_in_region <- input$show_related_junctions ##checks if to show related junctions
+          show_all_junctions_in_region <- if (!is.null(input$show_related_junctions)) input$show_related_junctions else FALSE
           x_axis_label <- paste("Genomic Position (chr", chrom, ")", sep = "")
-          get_faux_sashimi_plot(event_type, junction_event_data$junction_df, 
-                                junction_event_data$region_junction_df, x_axis_label, 
-                                junction_event_data$exon_df, fill_colors, show_all_junctions_in_region)
-        }
+          p <- get_faux_sashimi_plot(
+            event_type, 
+            junction_event_data$junction_df, 
+            junction_event_data$region_junction_df, 
+            x_axis_label, 
+            junction_event_data$exon_df, 
+            fill_colors, 
+            show_all_junctions_in_region
+          )
+          suppressWarnings(print(p))
+          }
       })
-      ##gives checkbox to view related junctions
-      output$checkbox_related_junctions <- renderUI({
-        req(selected_event_id())  # show only after click
-        checkboxInput(session$ns("show_related_junctions"), "Show related junctions in region", FALSE)
-      })
+      
       
       # Related junctions table
       #output$related_junction_DT <- DT::renderDT({

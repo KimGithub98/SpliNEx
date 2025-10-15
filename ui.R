@@ -2,6 +2,12 @@ fluidPage(
   theme = shinytheme("flatly"),
   useShinyjs(),
   
+  # Change browser tab title
+  tags$head(
+    tags$title("SpliNEx"),
+    tags$link(rel = "icon", type = "image/png", href = "SpliNEx_small_logo.png")
+  ),
+  
   navbarPage(title = img(src = "SpliNEx_small_logo.png", height = "30px"),
              id = "main_tabs",
              #info tab
@@ -17,7 +23,7 @@ fluidPage(
                       nmd_event_per_gene_ui("nmd_event")
              ),
              #tab3 nmd event details
-             tabPanel(title = "AS event details", value = "nmd_event_details",
+             tabPanel(title = "Alternative splicing event details", value = "nmd_event_details",
                       event_details_ui("nmd_event_details")
              )
   )

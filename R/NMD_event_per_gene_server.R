@@ -73,7 +73,7 @@ nmd_event_per_gene_server <- function(id) {
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(50), fill = "orange", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(50), ymax = log10(200), fill = "yellow", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(200), ymax = Inf, fill = "green", alpha = 0.2) +
-          geom_point(size = 3) +
+          geom_point(size = 3, na.rm = TRUE) +
           labs(x = "", y = "log10(LR gene coverage)") +
           theme_classic() +
           theme(legend.position = "bottom",
@@ -81,6 +81,7 @@ nmd_event_per_gene_server <- function(id) {
                 axis.text.x = element_text(angle = 45, hjust = 1)) +
           ggtitle("Long-read (LR) gene coverage")
       })
+      
       ##explanation coverage color zones
       output$coverage_legend <- renderUI({
         req(input$nmd_gene)  # ensures plot is rendered first
@@ -236,11 +237,11 @@ nmd_event_per_gene_server <- function(id) {
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(100), fill = "orange", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(100), ymax = log10(1000), fill = "yellow", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(1000), ymax = Inf, fill = "green", alpha = 0.2) +
-          geom_boxplot(fill = "ivory2", outlier.shape = NA) +
+          geom_boxplot(fill = "ivory2", outlier.shape = NA, na.rm = TRUE) +
           geom_jitter(aes(shape = treatment),
                       width = 0.2,   
                       height = 0, 
-                      size = 3) + # slight transparency so overlaps are visible
+                      size = 3, na.rm = TRUE) + # slight transparency so overlaps are visible
           labs(x = "", y = "log10(Normalized gene counts)", shape = "Treatment") +
           theme_classic() +
           theme(legend.position = "bottom",
@@ -267,7 +268,7 @@ nmd_event_per_gene_server <- function(id) {
       #download extended table
       output$download_nmd_event_per_gene_full_table <- downloadHandler(
         filename = function() {
-          paste0(input$nmd_gene, "_NMD_events_extended_table.csv")
+          paste0(input$nmd_gene, "_AS_events_extended_table.csv")
         },
         content = function(file) {
           df <- nmd_table_filtered_extended()
