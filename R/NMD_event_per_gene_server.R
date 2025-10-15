@@ -29,11 +29,28 @@ nmd_event_per_gene_server <- function(id) {
       
       # reset message
       gene_msg(NULL)
-      
-      if (!(gene %in% NMD_table_for_app$hgnc_name)) {
-        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset."))
+      if (!(gene %in% NMD_table_for_app$hgnc_name) & !(gene %in% rownames(normalized_counts_df))) {
+        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset. Did you use the HGNC gene symbol?"))
+        return()
+      } else if (!(gene %in% NMD_table_for_app$hgnc_name) & (gene %in% rownames(normalized_counts_df))) {
+        gene_msg(
+          tags$span(
+            style = "color:red;",
+            tags$strong("No alternative splicing data available for the selected gene in SpliNEx."),
+            "This is likely due to low long-read coverage and/or filtering thresholds. ",
+            "Additional information may still be present in the unfiltered data available from ",
+            tags$a(
+              href = "https://doi.org/your-doi-here", 
+              "[Wijnant et al., 2025]", 
+              target = "_blank",
+              style = "color:red; text-decoration: underline;"
+            ),
+            "."
+          )
+        )
         return()
       }
+      
       
       #plot LR coverage
       output$nmd_LR_gene_plot <- renderPlot({
