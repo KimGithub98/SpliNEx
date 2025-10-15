@@ -12,7 +12,7 @@ wtc_gene_expression_server <- function(id) {
       gene_msg(NULL)
       
       if (!(gene %in% rownames(normalized_counts_df))) {
-        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset. Did you use the HGNC symbol?"))
+        gene_msg(tags$span(style = "color:red;", "Gene not found in dataset. Did you use the HGNC gene symbol?"))
         return()
       }
       
