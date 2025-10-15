@@ -104,16 +104,29 @@ event_details_server <- function(id, selected_event = selected_event,parent_sess
       })
       
       # Junction plots
-      junction_event_data <- get_junction_event_data(event, event_type, row, junction_summary_for_app, strand) ##gets junction data
-      junction_event_data_val(junction_event_data)
+      if (event_type != "RI"){
+        junction_event_data <- get_junction_event_data(event, event_type, row, junction_summary_for_app, strand) ##gets junction data
+        junction_event_data_val(junction_event_data)
+      }
+      
       ##gets sashimi plot
       output$Faux_sashimi_plot <- renderPlot({
         req(selected_event_id())
-        show_all_junctions_in_region <- input$show_related_junctions ##checks if to show related junctions
-        x_axis_label <- paste("Genomic Position (chr", chrom, ")", sep = "")
-        get_faux_sashimi_plot(event_type, junction_event_data$junction_df, 
-                              junction_event_data$region_junction_df, x_axis_label, 
-                              junction_event_data$exon_df, fill_colors, show_all_junctions_in_region)
+        if (event_type == "RI") {
+          plot.new()  # create empty plot
+          text(
+            0.5, 0.5,
+            "Sashimi plot is not available for retained intron (RI) events.",
+            col = "red",
+            cex = 1.5
+          )
+        } else {
+          show_all_junctions_in_region <- input$show_related_junctions ##checks if to show related junctions
+          x_axis_label <- paste("Genomic Position (chr", chrom, ")", sep = "")
+          get_faux_sashimi_plot(event_type, junction_event_data$junction_df, 
+                                junction_event_data$region_junction_df, x_axis_label, 
+                                junction_event_data$exon_df, fill_colors, show_all_junctions_in_region)
+        }
       })
       ##gives checkbox to view related junctions
       output$checkbox_related_junctions <- renderUI({
@@ -122,10 +135,10 @@ event_details_server <- function(id, selected_event = selected_event,parent_sess
       })
       
       # Related junctions table
-      output$related_junction_DT <- DT::renderDT({
-        DT::datatable(get_junction_table_for_printing(junction_event_data$junction_df, junction_event_data$region_junction_df),
-                      escape = FALSE, options = list(scrollX = TRUE))
-      })
+      #output$related_junction_DT <- DT::renderDT({
+      #  DT::datatable(get_junction_table_for_printing(junction_event_data$junction_df, junction_event_data$region_junction_df),
+      #                escape = FALSE, options = list(scrollX = TRUE))
+      #})
       
       # Clickable plot to select events and junctions
       ##creates text with information on clicked junction
