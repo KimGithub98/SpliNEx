@@ -97,40 +97,43 @@ App_info_server <- function(id, parent_session) {
               style = "background-color: #ffffff; ",
               tags$div(
                 style = "font-size: 20px; font-weight: bold; margin-bottom: 10px;",
-                "Key concepts & terms used in this app:"
+                "Key concepts & terms used in this app*:"
               ),
               tags$div(style = "margin-top: 10px;"),
               tags$ul(
-                tags$li("Event ID & AS event type:"),
+                tags$li(tags$strong("Alternative splice (AS) event annotation (Event ID & AS event type):")),
                 tags$p(
                   "A unique identifier for each alternative splicing event, specifying its gene, genomic coordinates, AS event type and strand, as defined by the SUPPA tool. A detailed explanation of the event ID and the different AS event types can be found at the",
-                  tags$a("SUPPA GitHub page", href = "https://github.com/comprna/SUPPA", target = "_blank")
+                  tags$a("SUPPA GitHub page", href = "https://github.com/comprna/SUPPA", target = "_blank"),
+                  ". Each AS event annotation is created by comparing multiple transcripts that include the AS event or exclude the AS event, in the case of more complex alternative splicing in the region multiple AS event annotations can describe the same AS events by comparing different transcripts.",
                 ),
-                
-                tags$li("Percentage spliced in (PSI)"),
+                img(src = "overlapping_AS_events_Splinex.png", height = "200px"),
+                tags$br(),
+                tags$li(tags$strong("Percentage spliced in (PSI)")),
                 tags$p(
                   "PSI represents the fraction of transcripts in which a given alternative splicing event is included versus excluded, calculated from short-read RNA-seq splice-junction read counts, and ranges from 0 (never included) to 1 (always included). PSI provides an estimate of AS event usage, but alternative splicing events sharing the same splice junction(s) can negatively affect the calculated PSI."
                 ),
-                
-                tags$li("Relative event coverage"),
+                tags$br(),
+                tags$li(tags$strong("Relative event coverage")),
                 tags$p(
-                  "Relative event coverage represents the proportion of long-read (LR) transcripts supporting a given alternative splicing (AS) event (either inclusion or exclusion) relative to the total LR coverage in the region, providing an estimate of the relevance of the AS event within the gene (calculated as: # supporting AS event LR reads / # total LR reads spanning the AS event region). Low to medium relative event coverage (0–0.8) may indicate spurious AS event annotation, complex splicing in the region, or inaccurate PSI calculations."
+                  "Relative event coverage represents the proportion of long-read (LR) transcripts supporting a given alternative splicing (AS) event (either inclusion or exclusion) relative to the total LR coverage in the region, providing an estimate of the relevance of the AS event within the gene (calculated as: # supporting AS event LR reads / # total LR reads spanning the AS event region). Low to medium relative event coverage (0–0.8) may indicate spurious AS event annotation, complex splicing in the region, or inaccurate PSI calculations. More on the effect of the relative event coverage on AS event annotation reliability & PSI calculations can be found at",
+                  actionLink("link", "Wijnant et al. 2025")
                 ),
-                
-                tags$li("NMD AS prediction methods"),
+                img(src = "relative_event_coverage_AS_events_Splinex.png", height = "180px"),
+                tags$br(),
+                tags$br(),
+                tags$li(tags$strong("NMD AS prediction methods")),
                 tags$p(
-                  "Two complementary NMD AS prediction methods: (i) a more inclusive, less stringent method which labels an AS event as NMD-inducing if the AS event occurs exclusively in isoforms annotated as NMD sensitive (NMD-exclusive method), and (ii) a novel, more stringent LR-based splice-context aware method, which compares the protein-coding potential of isoforms with and without the AS event within the same splice context."
-                ),
-                
-                img(src = "NMD_AS_methods.png", height = "300px"),
-                
-                tags$p(
+                  "Two complementary NMD AS prediction methods: (i) a more inclusive, less stringent method which labels an AS event as NMD-inducing if the AS event occurs exclusively in isoforms annotated as NMD sensitive (NMD-exclusive method), and (ii) a novel, more stringent LR-based splice-context aware method, which compares the protein-coding potential of isoforms with and without the AS event within the same splice context.",
                   "For all NMD AS event types and a more detailed explanation & evaluation of both NMD AS prediction methods see:",
                   actionLink("link", "Wijnant et al. 2025")
-                )
+                ),
+                img(src = "NMD_AS_methods.png", height = "300px"),
+                tags$br(),
               ),
+              tags$br(),
               tags$p(
-                "For a more detailed explanation of terms, methods and calculations see:",
+                "*For a more detailed explanation of terms, methods and calculations see:",
                 actionLink("link", "Wijnant et al. 2025")
               )
           )
