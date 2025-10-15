@@ -5,7 +5,7 @@ App_info_ui <- function(id) {
              title = span(
                style = "display: flex; align-items: flex-end; gap: 10px;",
                img(src = "SpliNEx_full_logo.jpg", height = "50px"),
-               " : Splicing, NMD-sensitive splicing and Expression in iPSC-derived cells of the Brain"
+               " : Splicing, NMD-sensitive splicing and gene expression in iPSC-derived cells of the Brain"
              )
            ),
            uiOutput(ns("citation_request")),

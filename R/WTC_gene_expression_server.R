@@ -56,9 +56,10 @@ wtc_gene_expression_server <- function(id) {
       })
     })
     
+    
     output$download_gene_exp_plot_png <- downloadHandler(
       filename = function(){
-        paste0(input$submit_wtc, ".png")
+        paste0("Gene_expression_", input$wtc_gene, ".png")
       },
       content = function(file){
         ggsave(file, plot = wtc_gene_plot(), device = "png")
@@ -67,10 +68,10 @@ wtc_gene_expression_server <- function(id) {
     
     output$download_gene_exp_plot_svg <- downloadHandler(
       filename = function(){
-        paste0(input$submit_wtc, ".svg")
+        paste0("Gene_expression_", input$wtc_gene, ".svg")
       },
       content = function(file){
-        ggsave(file, plot = wtc_gene_plot(), device = "svg")
+        ggsave(file, plot = wtc_gene_plot(), device = svglite::svglite)
       }
     )
     

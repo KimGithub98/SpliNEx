@@ -10,6 +10,7 @@ library(stringr)
 library(shinyjs)
 library(RColorBrewer)
 library(bslib)
+library(svglite)
 source("R/Event_details_functions.R")
 
 #-------------Load data ------------------------------

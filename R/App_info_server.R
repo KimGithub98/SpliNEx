@@ -22,7 +22,10 @@ App_info_server <- function(id, parent_session) {
         width = 12,
         wellPanel(
           style = "background-color: #ffffff; ",
-          tags$strong("Use SpliNEx to:"),
+          tags$div(
+            style = "font-size: 20px; font-weight: bold; margin-bottom: 10px;",
+            "Use SpliNEx to:"
+          ),
           tags$div(style = "margin-top: 10px;"),
             tags$ul(
               tags$li("Explore gene expression in wild-type iPSC-derived iNeurons, astrocytes, and microglia", 
@@ -67,13 +70,16 @@ App_info_server <- function(id, parent_session) {
           width = 12,
           wellPanel(
             style = "background-color: #ffffff; ",
-            tags$strong("Alternative splicing data generation:"),
+            tags$div(
+              style = "font-size: 20px; font-weight: bold; margin-bottom: 10px;",
+              "Alternative splicing data generation:"
+            ),
             tags$div(style = "margin-top: 10px;"),
             tags$p(
               "Alternative splicing events were identified using long-read sequencing data from iPSC-derived iNeurons, astrocytes, and microglia, 
    and their quantification was based on short-read sequencing data. 
    For a detailed explanation of alternative splicing data generation: ",
-              actionLink("link", "[Wijnant et al. 2025]")
+              actionLink("link", "[Wijnant et al. 2025]"), "."
             ),
             img(src = "Data_generation.png", height = "400px"),
           )
@@ -89,7 +95,10 @@ App_info_server <- function(id, parent_session) {
             width = 12,
             wellPanel(
               style = "background-color: #ffffff; ",
-              tags$strong("Key concepts & terms used in this app:"),
+              tags$div(
+                style = "font-size: 20px; font-weight: bold; margin-bottom: 10px;",
+                "Key concepts & terms used in this app:"
+              ),
               tags$div(style = "margin-top: 10px;"),
               tags$ul(
                 tags$li("Event ID & AS event type:"),
@@ -100,7 +109,7 @@ App_info_server <- function(id, parent_session) {
                 
                 tags$li("Percentage spliced in (PSI)"),
                 tags$p(
-                  "PSI (Percent Spliced In) represents the fraction of transcripts in which a given alternative splicing event is included versus excluded, calculated from short-read RNA-seq splice-junction read counts, and ranges from 0 (never included) to 1 (always included). PSI provides an estimate of AS event usage, but alternative splicing events sharing the same splice junction(s) can negatively affect the calculated PSI."
+                  "PSI represents the fraction of transcripts in which a given alternative splicing event is included versus excluded, calculated from short-read RNA-seq splice-junction read counts, and ranges from 0 (never included) to 1 (always included). PSI provides an estimate of AS event usage, but alternative splicing events sharing the same splice junction(s) can negatively affect the calculated PSI."
                 ),
                 
                 tags$li("Relative event coverage"),
