@@ -375,6 +375,23 @@ get_ucsc_url <- function(event, event_type, chrom){
   } else if (event_type == "MX"){
     region <- paste(unlist(str_split(event, ";|:|-"))[5], unlist(str_split(event, ";|:|-"))[10], sep = "%2D")
   }
-  url <- paste("https://genome.ucsc.edu/cgi-bin/hgTracks?hgsid=3191311462&position=chr", chrom, ":", region, sep = "")
+  #url <- paste("https://genome.ucsc.edu/cgi-bin/hgTracks?hgsid=3191311462&position=chr", chrom, ":", region, sep = "")
+  session_user <- "Kim"
+  session_name <- "KIM_ISOseq2_short_read"
+  hgsid <- "3191311462"
+  
+  # Build UCSC Genome Browser URL
+  url <- paste0(
+    "https://genome.ucsc.edu/cgi-bin/hgTracks?",
+    "hgsid=", hgsid,
+    "&hgS_doOtherUser=submit",
+    "&hgS_otherUserName=", session_user,
+    "&hgS_otherUserSessionName=", session_name,
+    "&position=chr", chrom, ":", region
+  )
+  
+  # Print or use the URL
+  url
+  
   return(url)
 }

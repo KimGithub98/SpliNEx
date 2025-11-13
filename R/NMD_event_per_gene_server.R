@@ -51,6 +51,13 @@ nmd_event_per_gene_server <- function(id) {
         return()
       }
       
+      output$gene_title <- renderUI({
+        req(gene)  # Ensure a gene is selected
+        h3(
+          paste("Alternative splice events for", gene),
+          style = "text-align: center; margin-bottom: 20px;"
+        )
+      })
       
       #plot LR coverage
       output$nmd_LR_gene_plot <- renderPlot({
@@ -232,12 +239,12 @@ nmd_event_per_gene_server <- function(id) {
         gene_count_df$DIV <- factor(gene_count_df$DIV, levels = c("iPSC", "DIV21", "DIV28","DIV49", "Astrocytes", "Microglia"))
         
         # Plot
-        ggplot(gene_count_df, aes(x = pretty_sample_name, y = log10(gene_count)), fill = "ivory2") +
+        ggplot(gene_count_df, aes(x = pretty_sample_name, y = log10(gene_count)), fill = "#cfcece") +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "red", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(100), fill = "orange", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(100), ymax = log10(1000), fill = "yellow", alpha = 0.2) +
           annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(1000), ymax = Inf, fill = "green", alpha = 0.2) +
-          geom_boxplot(fill = "ivory2", outlier.shape = NA, na.rm = TRUE) +
+          geom_boxplot(fill = "#cfcece", outlier.shape = NA, na.rm = TRUE) +
           geom_jitter(aes(shape = treatment),
                       width = 0.2,   
                       height = 0, 

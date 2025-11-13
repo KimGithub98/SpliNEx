@@ -7,8 +7,8 @@ pretty_names <- c(
   "Neurons (DIV49, Yuan et al. 2023)" = "WTC_DIV49_batch2_S",
   "Neurons (DIV49, CHX, Wijnant et al. 2025)"        = "WTC_DIV49_CHX_K",
   "Neurons (DIV49, DMSO, Wijnant et al. 2025)"       = "WTC_DIV49_DMSO_K",
-  "iPSC (CHX, Wijnant et al. 2025)"         = "WTC_iPSC_CHX_K",
-  "iPSC (DMSO, Wijnant et al. 2025)"        = "WTC_iPSC_DMSO_K",
+  "iPSCs (CHX, Wijnant et al. 2025)"         = "WTC_iPSC_CHX_K",
+  "iPSCs (DMSO, Wijnant et al. 2025)"        = "WTC_iPSC_DMSO_K",
   "Microglia (CHX, Wijnant et al. 2025)"    = "WTC_Microglia_CHX_K",
   "Microglia (DMSO, Wijnant et al. 2025)"   = "WTC_Microglia_DMSO_K"
 )
