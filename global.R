@@ -1,6 +1,6 @@
 #script_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
 #setwd(script_dir)
-#setwd("C:/Users/Z978196/OneDrive - Radboudumc/z978196/R/Shiny Apps/NMD_event lookup structured")
+setwd("C:/Users/Z978196/OneDrive - Radboudumc/z978196/R/Shiny Apps/NMD_event lookup structured")
 library(shiny)
 library(shinythemes)
 library(ggplot2)
@@ -30,10 +30,10 @@ event_types <- unique(NMD_table_for_app$event_type)
 
 #-------------costum palette -----------------------
 div_colors <- c(
-  "iPSC"       = "ivory2",
-  "DIV21"      = "cadetblue1",
-  "DIV28"      = "cadetblue2",
-  "DIV49"      = "cadetblue",
-  "Astrocytes" = "palevioletred",
-  "Microglia"  = "burlywood4"
+  "iPSCs"              = "#cfcece",
+  "Neurons (DIV21)"    = "#cbf4ce",
+  "Neurons (DIV28)"    = "#95ba9a",
+  "Neurons (DIV49)"    = "#637b64",
+  "Astrocytes (DIVx)"  = "#b29ac9",
+  "Microglia (DIVx)"   = "#9ebae1"
 )

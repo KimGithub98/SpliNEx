@@ -31,7 +31,10 @@ wtc_gene_expression_server <- function(id) {
       gene_count_df <- as.data.frame(gene_counts)
       gene_count_df <- cbind(gene_count_df, metadata)
       colnames(gene_count_df)[1] <- "gene_count"
-      gene_count_df$DIV <- factor(gene_count_df$DIV, levels = c("iPSC", "DIV21", "DIV28","DIV49", "Astrocytes", "Microglia"))
+      gene_count_df$DIV <- factor(
+        gene_count_df$DIV,
+        levels = c("iPSC", "DIV21", "DIV28", "DIV49", "Astrocytes", "Microglia"),
+        labels = c("iPSCs","Neurons (DIV21)","Neurons (DIV28)","Neurons (DIV49)","Astrocytes (DIVx)","Microglia (DIVx)"))
       
       # Plot
       ggplot(gene_count_df, aes(x = DIV, y = gene_count)) +
@@ -39,7 +42,7 @@ wtc_gene_expression_server <- function(id) {
         geom_point(aes(shape = Data_source_pretty_name, color = treatment),
                    size = 3,
                    position = position_jitterdodge(dodge.width = 0.75, jitter.width = 0.3)) +
-        labs(x = "Cell-type", y = "Normalized gene counts", shape = "Data source", color = "Treatment") +
+        labs(x = "Cell-type", y = "DESeq2 normalized gene counts", fill = "Cell-type", shape = "Data source", color = "Treatment") +
         scale_shape_manual(values = c(15, 16, 17, 18, 8)) +
         scale_fill_manual(values = div_colors) +
         scale_color_manual(values = c("red2", "khaki3", "gray18")) +

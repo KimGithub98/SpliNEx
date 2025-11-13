@@ -81,7 +81,7 @@ App_info_server <- function(id, parent_session) {
    For a detailed explanation of alternative splicing data generation: ",
               actionLink("link", "[Wijnant et al. 2025]"), "."
             ),
-            img(src = "Data_generation.png", height = "400px"),
+            img(src = "Data_generation2.png", height = "400px"),
           )
         )
       )

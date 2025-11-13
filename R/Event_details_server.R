@@ -4,15 +4,23 @@ event_details_server <- function(id, selected_event = selected_event,parent_sess
     selected_event_id <- reactiveVal(NULL)
     clicked_junction <- reactiveVal(NULL)
     junction_event_data_val <- reactiveVal(NULL)
+    div_colors <- c(
+      "iPSCs"              = "#cfcece",
+      "Neurons (DIV21)"    = "#cbf4ce",
+      "Neurons (DIV28)"    = "#95ba9a",
+      "Neurons (DIV49)"    = "#637b64",
+      "Astrocytes (DIVx)"  = "#b29ac9",
+      "Microglia (DIVx)"   = "#9ebae1"
+    )
     fill_colors <- c(
-      "iPSC.DMSO" = "ivory2",
-      "iPSC.CHX" = colorspace::darken("ivory2", 0.3),
-      "DIV49.DMSO" = "cadetblue",
-      "DIV49.CHX" = colorspace::darken("cadetblue", 0.3),
-      "Astro.DMSO" = "palevioletred",
-      "Astro.CHX" = colorspace::darken("palevioletred", 0.3),
-      "Micro.DMSO" = "burlywood4",
-      "Micro.CHX" = colorspace::darken("burlywood4", 0.3)
+      "iPSC.DMSO" = "#cfcece",
+      "iPSC.CHX" = "#727272",
+      "DIV49.DMSO" = "#95ba9a",
+      "DIV49.CHX" = "#637b64",
+      "Astro.DMSO" = "#b29ac9",
+      "Astro.CHX" = "#71627f",
+      "Micro.DMSO" = "#9ebae1",
+      "Micro.CHX" = "#637489"
     )
     
     # Update reactive when user clicks in NMD tab
