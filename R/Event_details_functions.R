@@ -377,8 +377,8 @@ get_ucsc_url <- function(event, event_type, chrom){
   }
   #url <- paste("https://genome.ucsc.edu/cgi-bin/hgTracks?hgsid=3191311462&position=chr", chrom, ":", region, sep = "")
   session_user <- "Kim"
-  session_name <- "KIM_ISOseq2_short_read"
-  hgsid <- "3191311462"
+  session_name <- "SpliNEx_LR_data"
+  hgsid <- "3339419303"
   
   # Build UCSC Genome Browser URL
   url <- paste0(
