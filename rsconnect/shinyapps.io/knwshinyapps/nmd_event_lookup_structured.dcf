@@ -1,0 +1,10 @@
+name: nmd_event_lookup_structured
+title:
+username: knwshinyapps
+account: knwshinyapps
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 15748485
+bundleId: 11173833
+url: https://knwshinyapps.shinyapps.io/nmd_event_lookup_structured/
+version: 1
