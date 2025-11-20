@@ -15,8 +15,8 @@ event_details_server <- function(id, selected_event = selected_event,parent_sess
     fill_colors <- c(
       "iPSC.DMSO" = "#cfcece",
       "iPSC.CHX" = "#727272",
-      "DIV49.DMSO" = "#95ba9a",
-      "DIV49.CHX" = "#637b64",
+      "Neurons.DMSO" = "#95ba9a",
+      "Neurons.CHX" = "#637b64",
       "Astro.DMSO" = "#b29ac9",
       "Astro.CHX" = "#71627f",
       "Micro.DMSO" = "#9ebae1",

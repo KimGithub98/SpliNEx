@@ -7,6 +7,11 @@ get_PSI_event_data <- function(row){
     treatment = str_extract(sample_name, "CHX|DMSO"),
     cell_type = str_extract(sample_name, "iPSC|DIV49|Astro|Micro")
   )
+  PSI_df$cell_type <- str_replace(PSI_df$cell_type, "DIV49", "Neurons")
+  PSI_df$cell_type <- factor(
+    PSI_df$cell_type,
+    levels = c("iPSC", "Neurons", "Astro", "Micro")
+  )
   return(PSI_df)
 }
 
@@ -30,7 +35,7 @@ get_PSI_plot <- function(PSI_df, fill_colors){
   p <- ggplot(PSI_df, aes(x = cell_type, y = PSI*100, fill = interaction(cell_type, treatment))) +
     geom_bar(stat = "summary", position = position_dodge(width = 0.8), fun = "mean", size = 1, width = 0.7) +
     geom_point(aes(shape = treatment), position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.15), size = 2, alpha = 0.8) +
-    scale_fill_manual(values = fill_colors, name = NULL) +
+    scale_fill_manual(values = fill_colors, breaks = names(fill_colors), name = NULL) +
     scale_shape_manual(values = c(16,17), name = NULL) +
     theme_classic() +
     coord_cartesian(ylim = c(0,100)) +
@@ -70,6 +75,7 @@ get_junction_event_data <- function(event, event_type, row, junction_summary_for
            y_pos = group_id_sample + (as.numeric(junction)/5)) %>%  # assigns a unique number to each group
     ungroup()
   
+  junction_df$cell <- str_replace(junction_df$cell, "DIV49", "Neurons")
   
   #faux sashimi plot
   region_junction_df <- junction_summary_for_app[junction_summary_for_app$group_id == junction_df$group_id & 
