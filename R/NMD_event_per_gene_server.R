@@ -77,10 +77,10 @@ nmd_event_per_gene_server <- function(id) {
                                                                  "Astrocytes (DMSO)","Astrocytes (CHX)","Microglia (DMSO)","Microglia (CHX)"))
         
         ggplot(long_df, aes(x = sample_pretty, y = log10(gene_count+1))) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "red", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(50), fill = "orange", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(50), ymax = log10(200), fill = "yellow", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(200), ymax = Inf, fill = "green", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "darkorange3", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(50), fill = "goldenrod1", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(50), ymax = log10(200), fill = "cadetblue1", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(200), ymax = Inf, fill = "cadetblue", alpha = 0.2) +
           geom_point(size = 3, na.rm = TRUE) +
           labs(x = "", y = "log10(LR gene coverage)") +
           theme_classic() +
@@ -100,13 +100,13 @@ nmd_event_per_gene_server <- function(id) {
               style = "background-color: #f9f9f9; border: 1px solid #ccc;",
               tags$strong("Explanation of color zones for short-read (SR) / long-read (LR) coverage: "), 
               tags$br(),
-              tags$span(style = "color:green;", "Green: High SR/LR coverage — Likely robust detection of isoforms and more reliable PSI estimates."),
+              tags$span(style = "color:#5F9EA0;", "Blue: High SR/LR coverage — Likely robust detection of isoforms and more reliable PSI estimates."),
               tags$br(),
-              tags$span(style = "color:goldenrod;", "Yellow: Medium SR/LR coverage — Likely moderate detection of isoforms and moderately reliable PSI values."),
+              tags$span(style = "color:#BFDFE8;", "Light blue: Medium SR/LR coverage — Likely moderate detection of isoforms and moderately reliable PSI values."),
               tags$br(),
-              tags$span(style = "color:orange;", "Orange: Low SR/LR coverage — Likely reduced detection of isoforms and potentially less reliable or missing PSI values."),
+              tags$span(style = "color:#FFC125;", "Yellow: Low SR/LR coverage — Likely reduced detection of isoforms and potentially less reliable or missing PSI values."),
               tags$br(),
-              tags$span(style = "color:red;", "Red: Very low SR/LR coverage — Likely poor detection of isoforms and potentially less reliable or missing PSI values.")
+              tags$span(style = "color:#CD6600;", "Dark orange: Very low SR/LR coverage — Likely poor detection of isoforms and potentially less reliable or missing PSI values.")
             )
           )
         )
@@ -241,10 +241,10 @@ nmd_event_per_gene_server <- function(id) {
         
         # Plot
         ggplot(gene_count_df, aes(x = pretty_sample_name, y = log10(gene_count)), fill = "#cfcece") +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "red", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(100), fill = "orange", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(100), ymax = log10(1000), fill = "yellow", alpha = 0.2) +
-          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(1000), ymax = Inf, fill = "green", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = log10(10), fill = "darkorange3", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(10), ymax = log10(100), fill = "goldenrod1", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(100), ymax = log10(1000), fill = "cadetblue1", alpha = 0.2) +
+          annotate("rect", xmin = -Inf, xmax = Inf, ymin = log10(1000), ymax = Inf, fill = "cadetblue", alpha = 0.2) +
           geom_boxplot(fill = "#cfcece", outlier.shape = NA, na.rm = TRUE) +
           geom_jitter(aes(shape = treatment),
                       width = 0.2,   
