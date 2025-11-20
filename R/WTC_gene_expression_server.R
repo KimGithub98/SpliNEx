@@ -5,7 +5,7 @@ wtc_gene_expression_server <- function(id) {
     #reactive plot function
     wtc_gene_plot <- reactive({
       req(input$submit_wtc)
-      gene <- input$wtc_gene
+      gene <- toupper(input$wtc_gene)
       selected_batches <- input$selected_batches
       selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
       

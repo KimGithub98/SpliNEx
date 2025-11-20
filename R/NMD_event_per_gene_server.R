@@ -22,9 +22,10 @@ nmd_event_per_gene_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     gene_msg <- reactiveVal(NULL)
     observeEvent(input$submit_nmd, {
-      gene <- input$nmd_gene
+      gene <- toupper(input$nmd_gene)
       selected_batches <- batch_ids[grepl("DMSO|CHX", batch_ids)]
       selected_samples <- unlist(batch_list[selected_batches], use.names = FALSE)
+      NMD_table_for_app$hgnc_name <- toupper(NMD_table_for_app$hgnc_name)
       NMD_table_for_app_gene <- NMD_table_for_app[NMD_table_for_app$hgnc_name == gene,]
       
       # reset message
