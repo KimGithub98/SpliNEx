@@ -31,4 +31,4 @@ Dependencies & packages:
 
 **Please cite:**
 
-Wijnant KN, Nadif Kasri N, Vissers L. Systematic analysis of genetic and phenotypic characteristics reveals antisense oligonucleotide therapy potential for one-third of neurodevelopmental disorders. Genome Med. 2025;17(1):59. https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-025-01477-x
+Wijnant KN et al. x. x
