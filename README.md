@@ -2,20 +2,25 @@
 
 Code used in "Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery" (Wijnant et al. 2026)
 
-This repository contains code used to generate the ShinyApp (link Shiny App) containing the data from (Wijnant et al. 2026) <link> it contains:
+This repository contains all code used to generate the SpliNEx Shiny application (link to Shiny app), which provides interactive access to the data and analyses presented in Wijnant et al. (2026) (link to paper).
 
-- ShinyApp general app files (global.R, ui.R & server.R)
-- Modules in the R folder:
-  - App_info_server.R & App_info_ui.R: contains server & ui information for the SpliNEx shiny app info tab
-  - WTC_gene_expression_server.R & WTC_gene_expression_ui.R : contains server & ui code for the WTC gene expression tab
-  - NMD_event_per_gene_server.R & NMD_event_per_gene_ui.R: contains server & ui code for the tab to search for AS events per hgnc_symbol
-  - Event_details_server.R & Event_details_ui.R & Event_details_functions.R: contains server & ui & functions for the tab to view details for AS events
--  'www' folder: images used in the SpliNEx shiny app
--  'data' folder: r data files used in the SpliNEx shiny app
+**Repository Structure**
 
-This code was generated in: R version 4.4.1. 
+- Top-level Shiny application files
+  - global.R, ui.R, server.R
+- R Modules (located in the R/ directory):
+  - App_info_server.R & App_info_ui.R: Server and UI logic for the App Info tab.
+  - WTC_gene_expression_server.R & WTC_gene_expression_ui.R: Modules for the WTC gene expression tab.
+  - NMD_event_per_gene_server.R & NMD_event_per_gene_ui.R: Modules for querying NMD-coupled alternative splicing events per HGNC symbol.
+  - Event_details_server.R, Event_details_ui.R, Event_details_functions.R: Server, UI, and helper functions for the Event Details tab.
+- www/ directory: Contains images and other static assets used in the SpliNEx application.
+- data/ directory: Contains R data files required by the application.
 
-Dependencies & packages:
+**Software Environment**
+All code was generated and tested using:
+R version 4.4.1
+
+**Package Dependencies**
 - shiny_1.9.1
 - shinythemes_1.2.0
 - ggplot2_4.0.0
