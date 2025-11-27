@@ -36,6 +36,6 @@ div_colors <- c(
   "Neurons (DIV21)"    = "#cbf4ce",
   "Neurons (DIV28)"    = "#95ba9a",
   "Neurons (DIV49)"    = "#637b64",
-  "Astrocytes (DIVx)"  = "#b29ac9",
-  "Microglia (DIVx)"   = "#9ebae1"
+  "Astrocytes (DIV41)"  = "#b29ac9",
+  "Microglia (DIV23)"   = "#9ebae1"
 )

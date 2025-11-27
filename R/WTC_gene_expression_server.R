@@ -34,7 +34,7 @@ wtc_gene_expression_server <- function(id) {
       gene_count_df$DIV <- factor(
         gene_count_df$DIV,
         levels = c("iPSC", "DIV21", "DIV28", "DIV49", "Astrocytes", "Microglia"),
-        labels = c("iPSCs","Neurons (DIV21)","Neurons (DIV28)","Neurons (DIV49)","Astrocytes (DIVx)","Microglia (DIVx)"))
+        labels = c("iPSCs","Neurons (DIV21)","Neurons (DIV28)","Neurons (DIV49)","Astrocytes (DIV41)","Microglia (DIV23)"))
       
       # Plot
       ggplot(gene_count_df, aes(x = DIV, y = gene_count)) +
