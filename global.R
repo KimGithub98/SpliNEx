@@ -17,6 +17,7 @@ source("R/Event_details_functions.R")
 normalized_counts_df <- readRDS("data/normalized_counts_df.rds")
 rownames(normalized_counts_df) <- toupper(rownames(normalized_counts_df))
 colData_df <- readRDS("data/colData_df.rds")
+colData_df$Data_source_pretty_name[colData_df$Data_source_pretty_name == " Emma et al. 2025"] <- " Unpublished"
 NMD_table_for_app <- readRDS("data/NMD_table_for_app.rds")
 junction_summary_for_app <- readRDS("data/junction_summary_for_app.rds")
 
