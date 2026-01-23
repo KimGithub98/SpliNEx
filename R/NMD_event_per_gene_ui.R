@@ -41,10 +41,11 @@ nmd_event_per_gene_ui <- function(id) {
              )
            ),
            hr(),
-           HTML("
-           <b>References & data sources:</b><br>
-           1. Wijnant et al. 2025<br><br>
-           <b>Please city: Wijnant et al. 2025</b><br>
-           Build with Shiny & Shinythemes in R version 4.4.1")
+           tags$div(
+             tags$b("References & data sources:"), tags$br(),
+             "1. ", tags$a("Wijnant et al. Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery. bioRxiv. 2026 Jan 22", href = "https://doi.org/10.64898/2026.01.19.700316", target = "_blank"), tags$br(),tags$br(),
+             tags$b("Please cite: Wijnant et al. 2026"), tags$br(),
+             "Build with Shiny & Shinythemes in R version 4.4.1"
+           )
   )
 }

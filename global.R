@@ -1,9 +1,9 @@
-#script_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
-#setwd(script_dir)
+script_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
+setwd(script_dir)
 #setwd("C:/Users/Z978196/OneDrive - Radboudumc/z978196/R/Shiny Apps/NMD_event lookup structured")
+library(ggplot2)
 library(shiny)
 library(shinythemes)
-library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(stringr)
@@ -18,6 +18,7 @@ normalized_counts_df <- readRDS("data/normalized_counts_df.rds")
 rownames(normalized_counts_df) <- toupper(rownames(normalized_counts_df))
 colData_df <- readRDS("data/colData_df.rds")
 colData_df$Data_source_pretty_name[colData_df$Data_source_pretty_name == " Emma et al. 2025"] <- " Unpublished"
+colData_df$Data_source_pretty_name[colData_df$Data_source_pretty_name == " Wijnant et al. 2025"] <- " Wijnant et al. 2026"
 NMD_table_for_app <- readRDS("data/NMD_table_for_app.rds")
 junction_summary_for_app <- readRDS("data/junction_summary_for_app.rds")
 

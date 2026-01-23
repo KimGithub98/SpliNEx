@@ -9,7 +9,7 @@ App_info_server <- function(id, parent_session) {
           wellPanel(
             style = "background-color: #f9f9f9;",
             tags$strong("Please cite: "), 
-            tags$span("Wijnant KN et al. Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery. Journal. Year Month date; Pages. doi: #. PMID: #; PMCID: #."),
+            tags$span("Wijnant KN et al. Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery. Journal. Year Month date; Pages. doi: #. PMID: #; PMCID: #.")
           )
         )
       )
@@ -18,15 +18,15 @@ App_info_server <- function(id, parent_session) {
     ## SpliNEx usage
     output$splinex_features <- renderUI({
       fluidRow(
-      column(
-        width = 12,
-        wellPanel(
-          style = "background-color: #ffffff; ",
-          tags$div(
-            style = "font-size: 20px; font-weight: bold; margin-bottom: 10px;",
-            "Use SpliNEx to:"
-          ),
-          tags$div(style = "margin-top: 10px;"),
+        column(
+          width = 12,
+          wellPanel(
+            style = "background-color: #ffffff; ",
+            tags$div(
+              style = "font-size: 20px; font-weight: bold; margin-bottom: 10px;",
+              "Use SpliNEx to:"
+            ),
+            tags$div(style = "margin-top: 10px;"),
             tags$ul(
               tags$li("Explore gene expression in wild-type iPSC-derived iNeurons, astrocytes, and microglia", 
                       actionLink(ns("go_gene_expression_page"), "[view expression for gene]")),
@@ -44,9 +44,9 @@ App_info_server <- function(id, parent_session) {
                       )
               )
             )
+          )
         )
       )
-    )
     })
     
     ##navigate to other tabs
@@ -79,9 +79,13 @@ App_info_server <- function(id, parent_session) {
               "Alternative splicing events were identified using long-read sequencing data from iPSC-derived iNeurons, astrocytes, and microglia, 
    and their quantification was based on short-read sequencing data. 
    For a detailed explanation of alternative splicing data generation: ",
-              actionLink("link", "[Wijnant et al. 2025]"), "."
+              tags$a(
+                "Wijnant et al. 2026",
+                href = "https://www.biorxiv.org/content/10.64898/2026.01.19.700316v1",
+                target = "_blank"
+              ), "."
             ),
-            img(src = "Data_generation2.png", height = "400px"),
+            img(src = "Data_generation2.png", height = "400px")
           )
         )
       )
@@ -105,7 +109,7 @@ App_info_server <- function(id, parent_session) {
                 tags$p(
                   "A unique identifier for each alternative splicing event, specifying its gene, genomic coordinates, AS event type and strand, as defined by the SUPPA tool. A detailed explanation of the event ID and the different AS event types can be found at the",
                   tags$a("SUPPA GitHub page", href = "https://github.com/comprna/SUPPA", target = "_blank"),
-                  ". Each AS event annotation is created by comparing multiple transcripts that include the AS event or exclude the AS event, in the case of more complex alternative splicing in the region multiple AS event annotations can describe the same AS events by comparing different transcripts.",
+                  ". Each AS event annotation is created by comparing multiple transcripts that include the AS event or exclude the AS event, in the case of more complex alternative splicing in the region multiple AS event annotations can describe the same AS events by comparing different transcripts."
                 ),
                 img(src = "overlapping_AS_events_Splinex.png", height = "200px"),
                 tags$br(),
@@ -117,7 +121,11 @@ App_info_server <- function(id, parent_session) {
                 tags$li(tags$strong("Relative event coverage")),
                 tags$p(
                   "Relative event coverage represents the proportion of long-read (LR) transcripts supporting a given alternative splicing (AS) event (either inclusion or exclusion) relative to the total LR coverage in the region, providing an estimate of the relevance of the AS event within the gene (calculated as: # supporting AS event LR reads / # total LR reads spanning the AS event region). Low to medium relative event coverage (0–0.8) may indicate spurious AS event annotation, complex splicing in the region, or inaccurate PSI calculations. More on the effect of the relative event coverage on AS event annotation reliability & PSI calculations can be found at",
-                  actionLink("link", "Wijnant et al. 2025")
+                  tags$a(
+                    "Wijnant et al. 2026",
+                    href = "https://www.biorxiv.org/content/10.64898/2026.01.19.700316v1",
+                    target = "_blank"
+                  )
                 ),
                 img(src = "relative_event_coverage_AS_events_Splinex.png", height = "180px"),
                 tags$br(),
@@ -126,7 +134,11 @@ App_info_server <- function(id, parent_session) {
                 tags$p(
                   "Two complementary NMD AS prediction methods: (i) a more inclusive, less stringent method which labels an AS event as NMD-inducing if the AS event occurs exclusively in isoforms annotated as NMD sensitive (NMD-exclusive method), and (ii) a novel, more stringent LR-based splice-context aware method, which compares the protein-coding potential of isoforms with and without the AS event within the same splice context.",
                   "For all NMD AS event types and a more detailed explanation & evaluation of both NMD AS prediction methods see:",
-                  actionLink("link", "Wijnant et al. 2025")
+                  tags$a(
+                    "Wijnant et al. 2026",
+                    href = "https://www.biorxiv.org/content/10.64898/2026.01.19.700316v1",
+                    target = "_blank"
+                  )
                 ),
                 img(src = "NMD_AS_methods.png", height = "300px"),
                 tags$br(),
@@ -134,13 +146,16 @@ App_info_server <- function(id, parent_session) {
               tags$br(),
               tags$p(
                 "*For a more detailed explanation of terms, methods and calculations see:",
-                actionLink("link", "Wijnant et al. 2025")
+                tags$a(
+                  "Wijnant et al. 2026",
+                  href = "https://www.biorxiv.org/content/10.64898/2026.01.19.700316v1",
+                  target = "_blank"
+                )
               )
+            )
           )
-        )
         )
       })
     
   })
 }
-

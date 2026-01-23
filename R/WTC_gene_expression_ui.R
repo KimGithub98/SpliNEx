@@ -1,16 +1,16 @@
 pretty_names <- c(
-  "Astrocytes (CHX, Wijnant et al. 2025)"   = "WTC_Astrocytes_CHX_K",
-  "Astrocytes (DMSO, Wijnant et al. 2025)"  = "WTC_Astrocytes_DMSO_K",
+  "Astrocytes (CHX, Wijnant et al. 2026)"   = "WTC_Astrocytes_CHX_K",
+  "Astrocytes (DMSO, Wijnant et al. 2026)"  = "WTC_Astrocytes_DMSO_K",
   "Neurons (DIV21, Leonardi et al. 2025)"      = "WTC_DIV21_S",
   "Neurons (DIV28, Unpublished)"      = "WTC_DIV28_S",
   "Neurons (DIV49, Hommersom et al. 2025)" = "WTC_DIV49_batch1_S",
   "Neurons (DIV49, Yuan et al. 2023)" = "WTC_DIV49_batch2_S",
-  "Neurons (DIV49, CHX, Wijnant et al. 2025)"        = "WTC_DIV49_CHX_K",
-  "Neurons (DIV49, DMSO, Wijnant et al. 2025)"       = "WTC_DIV49_DMSO_K",
-  "iPSCs (CHX, Wijnant et al. 2025)"         = "WTC_iPSC_CHX_K",
-  "iPSCs (DMSO, Wijnant et al. 2025)"        = "WTC_iPSC_DMSO_K",
-  "Microglia (CHX, Wijnant et al. 2025)"    = "WTC_Microglia_CHX_K",
-  "Microglia (DMSO, Wijnant et al. 2025)"   = "WTC_Microglia_DMSO_K"
+  "Neurons (DIV49, CHX, Wijnant et al. 2026)"        = "WTC_DIV49_CHX_K",
+  "Neurons (DIV49, DMSO, Wijnant et al. 2026)"       = "WTC_DIV49_DMSO_K",
+  "iPSCs (CHX, Wijnant et al. 2026)"         = "WTC_iPSC_CHX_K",
+  "iPSCs (DMSO, Wijnant et al. 2026)"        = "WTC_iPSC_DMSO_K",
+  "Microglia (CHX, Wijnant et al. 2026)"    = "WTC_Microglia_CHX_K",
+  "Microglia (DMSO, Wijnant et al. 2026)"   = "WTC_Microglia_DMSO_K"
 )
 
 
@@ -45,14 +45,14 @@ wtc_gene_expression_ui <- function(id) {
            hr(),
            tags$div(
              tags$b("References & data sources:"), tags$br(),
-             "1. ", tags$a("Wijnant et al. 2025", href = "https://doi.org/YOUR_DOI_1", target = "_blank"), tags$br(),
+             "1. ", tags$a("Wijnant et al. Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery. bioRxiv. 2026 Jan 22", href = "https://doi.org/10.64898/2026.01.19.700316", target = "_blank"), tags$br(),
              "2. ", tags$a("Leonardi O et al. CHD2 Dosage Ties Autolysosomal Pathway to Cortical Maturation in Disease and Evolution. bioRxiv. 2025 Jan 21.", 
                            href = "https://doi.org/10.1101/2025.01.21.634145", target = "_blank"), tags$br(),
              "3. ", tags$a("Hommersom MP et al. CACNA1A haploinsufficiency leads to reduced synaptic function and increased intrinsic excitability. Brain. 2025 Apr 3;148(4):1286-1301.", 
                            href = "https://doi.org/10.1093/brain/awae330", target = "_blank"), tags$br(),
              "4. ", tags$a("Yuan X et al. A human in vitro neuronal model for studying homeostatic plasticity at the network level. Stem Cell Reports. 2023 Nov 14;18(11):2222-2239.", 
                            href = "https://doi.org/10.1016/j.stemcr.2023.09.011", target = "_blank"), tags$br(), tags$br(),
-             tags$b("Please cite: Wijnant et al. 2025"), tags$br(),
+             tags$b("Please cite: Wijnant et al. 2026"), tags$br(),
              "Build with Shiny & Shinythemes in R version 4.4.1"
            )
   )
