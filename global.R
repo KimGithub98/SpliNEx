@@ -1,5 +1,5 @@
-script_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
-setwd(script_dir)
+#script_dir <- dirname(rstudioapi::getSourceEditorContext()$path)
+#setwd(script_dir)
 #setwd("C:/Users/Z978196/OneDrive - Radboudumc/z978196/R/Shiny Apps/NMD_event lookup structured")
 library(ggplot2)
 library(shiny)

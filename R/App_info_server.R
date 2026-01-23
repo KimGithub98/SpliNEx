@@ -9,7 +9,7 @@ App_info_server <- function(id, parent_session) {
           wellPanel(
             style = "background-color: #f9f9f9;",
             tags$strong("Please cite: "), 
-            tags$span("Wijnant KN et al. Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery. Journal. Year Month date; Pages. doi: #. PMID: #; PMCID: #.")
+            tags$span("Wijnant KN et al. Mapping NMD-coupled alternative splicing in iPSC-derived brain cells: a resource for therapeutic discovery. bioRxiv. 2026 Jan 22; doi: https://doi.org/10.64898/2026.01.19.700316.")
           )
         )
       )
