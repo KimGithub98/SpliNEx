@@ -18,6 +18,7 @@ server <- function(input, output, session) {
   })
   
   observe({
-    print(paste("Memory used:", pryr::mem_used() / 1024^2, "MB"))
+    mem <- sum(gc()[, 2])
+    print(paste("Memory used:", round(mem, 1), "MB"))
   })
 }
