@@ -40,7 +40,8 @@ wtc_module_server <- function(id, normalized_counts_df, colData_df) {
           scale_color_manual(values = c("red2", "khaki3", "gray18")) +
           scale_shape_manual(values = c(15,16,17,18,8)) +
           theme_classic() +
-          theme(legend.position = "bottom") +
+          theme(legend.position = "bottom", 
+                axis.text.x = element_text(angle = 45, hjust = 1)) +
           labs(title = gene, y = "Normalized gene counts")
       })
     })

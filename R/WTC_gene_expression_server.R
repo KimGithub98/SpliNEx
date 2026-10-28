@@ -47,7 +47,8 @@ wtc_gene_expression_server <- function(id) {
         scale_fill_manual(values = div_colors) +
         scale_color_manual(values = c("red2", "khaki3", "gray18")) +
         theme_classic() +
-        theme(plot.title = element_text(hjust = 0.5, size = 20)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 20),
+              axis.text.x = element_text(angle = 45, hjust = 1)) +
         ggtitle(gene)
     })
     
