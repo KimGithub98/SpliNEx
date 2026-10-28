@@ -13,7 +13,7 @@ nmd_event_per_gene_ui <- function(id) {
                                   choices = NMD_only_types, 
                                   selected = NMD_only_types),
                checkboxGroupInput(ns("selected_event_types"), "AS event types to show:",
-                                  choices = event_types, 
+                                  choices = event_choices, 
                                   selected = event_types),
                actionButton(ns("submit_nmd"), "Submit")
              ),
