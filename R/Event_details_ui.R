@@ -19,24 +19,28 @@ event_details_ui <- function(id) {
              
              #NMD_prediction/event details 
              fluidRow(
-               column(width = 11,
+               column(width = 7,
                       uiOutput(ns("event_details_print"))
-                      )
+                      ),
+               column(width = 4, div(title = "Shows the relative event coverage for the selected event per long-read sequencing sample.", 
+                                     plotOutput(ns("perc_region_plot"), height = "280px"))),
                ),
              
              # PSI plot
              fluidRow(
-               column(width = 5, plotOutput(ns("event_PSI_plot"), height = "500px")),
+               column(width = 5, div(title = "Shows the percent spliced in (PSI) for the selected event across samples.",
+                                     plotOutput(ns("event_PSI_plot"), height = "500px"))),
                column(width = 6,  # full width
                       DT::dataTableOutput(ns("event_psi_DT"))
                )
+               
                
              ),
              # Sashimi plot and UCSC button
              fluidRow(
                fluidRow(
-                 column(width = 11, 
-                        plotOutput(ns("Faux_sashimi_plot"), click = ns("faux_click"), height = "800px"),
+                 column(width = 11, div(title = "Shows the junctions and range of junction-spanning read counts for the selected event and any selected interfering events across short-read RNA-seq samples. CLICK ON JUNCTION LABEL to view the corresponding junction and event information", 
+                        plotOutput(ns("Faux_sashimi_plot"), click = ns("faux_click"), height = "800px")),
                         fluidRow(
                           column(width = 8,
                                  verbatimTextOutput(ns("faux_info"))
@@ -46,12 +50,18 @@ event_details_ui <- function(id) {
                           )
                         )
                  ),
-                 column(width = 6,
-                        uiOutput(ns("checkbox_related_junctions"))
-                 ),
                  verbatimTextOutput(ns("nmd_gene_output"))
                )
+             ),
+             
+             #related junctions table
+             fluidRow(
+               tags$h4("Table of interfering AS events:", style = "margin-top: 25px;"),
+               column(12,  # full width
+                      DT::dataTableOutput(ns("related_junction_DT"))
+               )
              )
+             
            ),
            hr(),
            tags$div(
