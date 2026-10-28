@@ -30,6 +30,7 @@ batch_list <- split(sample_names, batch_ids)
 NMD_event_types <- unique(NMD_table_for_app$NMD_sister_transcript)
 NMD_only_types <- unique(NMD_table_for_app$NMD_exclusive)
 event_types <- unique(NMD_table_for_app$event_type)
+event_choices <- c("Skipped exon (SE)" = "SE", "Alternative 3' splice site (A3)" = "A3", "Alternative 5' splice site (A5)" = "A5", "Mutually exclusive (MX)" = "MX", "Retained Intron (RI)" = "RI")
 
 #-------------costum palette -----------------------
 div_colors <- c(
